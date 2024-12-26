@@ -1,0 +1,28 @@
+
+
+.heading {
+    font-size: 30px;
+    color: #333; 
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.description {
+    font-size: 20px;
+    padding: 5px 20px;
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+.heading[contenteditable="true"]:focus {
+  outline: none; 
+}
+
+.description[contenteditable="true"]:focus {
+  outline: none; 
+}

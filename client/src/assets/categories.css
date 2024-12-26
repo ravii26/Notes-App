@@ -1,0 +1,28 @@
+.category-table-c {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+}
+
+.category-table-c thead th {
+  background-color: #97d1af;
+  border-bottom: 1px solid #ccc;
+}
+
+.category-table-c tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.category-table-c th,
+.category-table-c td {
+  padding: 10px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.btn-primary-c,
+.btn-danger-c {
+  border-radius: 5px;
+  padding: 8px 12px;
+}
