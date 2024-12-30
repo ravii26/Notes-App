@@ -14,7 +14,7 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
-          <div className="modal-header-c">
+          <div className="modal-header">
             <h5 className="modal-title modal-add " id="addNoteModalLabel">
               Add Note
             </h5>
@@ -63,10 +63,8 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
                   Category
                 </label>
                 <select name="" id="" className="form-control" value={newNote.category} onChange={(e) => setNewNote({ ...newNote, category : e.target.value })}>
-                  <option disabled hidden value="">Select Category</option>
-                  {/* <option value="Personal">Personal</option>
-                  <option value="Work">Work</option>
-                  <option value="Other">Other</option> */}
+                  <option disabled hidden value="" defaultValue="No">Select Category</option>
+        
                   {categories.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.name}

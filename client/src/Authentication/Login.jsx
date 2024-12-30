@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Logo from "../assets/logo.svg";
+import { v4 as uuidv4 } from 'uuid';
+
+
 
 function Login() {
   const [logindata, setLoginData] = useState({
@@ -18,19 +21,68 @@ function Login() {
     setLoginData({ ...logindata, [e.target.name]: e.target.value });
   };
 
+  const generateDeviceId = () => {
+    
+    const getBrowserName = () => {
+      const userAgent = navigator.userAgent;
+  
+      // Check for different browsers using regular expressions
+      if (userAgent.includes("Chrome")) {
+          if (userAgent.includes("Edg")) {
+              return "Microsoft Edge";
+          }
+          return "Google Chrome";
+      }
+      if (userAgent.includes("Firefox")) {
+          return "Mozilla Firefox";
+      }
+      if (userAgent.includes("Safari")) {
+          if (userAgent.includes("Chrome")) {
+              return "Google Chrome"; // Chrome also contains "Safari" in userAgent
+          }
+          return "Apple Safari";
+      }
+      if (userAgent.includes("MSIE") || userAgent.includes("Trident")) {
+          return "Internet Explorer";
+      }
+      if (userAgent.includes("Opera") || userAgent.includes("OPR")) {
+          return "Opera";
+      }
+  
+      return "Unknown Browser";  // Return if browser is not recognized
+  };  
+
+    let deviceId = localStorage.getItem('deviceId');
+    logindata.browserName = getBrowserName();
+
+    if (!deviceId) {
+        deviceId = uuidv4();
+        localStorage.setItem('deviceId', deviceId);
+    }
+
+    return deviceId;
+}
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      logindata.deviceId = generateDeviceId();
       const url = "http://localhost:5000/api/auth";
       const response = await axios.post(url, logindata);
       localStorage.setItem("token", response.data.data);
       navigate("/notes");
     } catch (error) {
       if (error.response) {
+        if (error.message === 'Device limit reached. Please remove an old device to proceed.') {
+          setError('You have reached the maximum number of devices. Manage your devices to continue.');
+      } else {
         setError(error.response.data.message);
+      }
       }
     }
   };
+
+
 
   return (
     <div className="container">

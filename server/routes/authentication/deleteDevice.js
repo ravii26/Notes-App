@@ -1,8 +1,7 @@
 import express from "express";
-import { Category } from "../../models/categories.js";
 import { User } from "../../models/user.js";
-import jwt from "jsonwebtoken";
 
+import jwt from "jsonwebtoken";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -12,18 +11,16 @@ router.get("/", async (req, res) => {
     if (!token) {
       return res.status(400).send({ message: "No token provided" });
     }
-    const decoded = jwt.verify(token, "sadsfdsfaffsc3332rfa3");
+    const decoded = jwt.verify(token,process.env.JWT_SECRET_KEY);
     const user = await User.findOne({ _id: decoded._id });
 
     if (!user) return res.status(404).send({ message: "User not found" });
-    // const device = user.devices.find((device) => device.deviceId === decoded.deviceId);
-    // if (!device) return res.status(404).send({ message: "Device not found" });
-    const categories = await Category.find({ user: user._id });
+    const id = req.query.deviceId;
 
-    if (!categories)
-      return res.status(404).send({ message: "Categories not found" });
+    user.devices = user.devices.filter((device) => device.deviceId !== id);
+    await user.save();
 
-    res.status(200).send({ categories });
+    res.status(200).send({ devices: user.devices });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Internal Server Error" });

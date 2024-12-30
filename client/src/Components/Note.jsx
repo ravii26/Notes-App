@@ -84,9 +84,9 @@ function Note() {
       const response = await axios.put(
         `http://localhost:5000/api/noteupdate/${noteId}`,
         {
-          token,
           title: note.title,
           description: note.description,
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       if (response.status === 200) {

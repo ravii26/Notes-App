@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "assets/notes.css";
 import "assets/sidebar.css";
-// import "assets/pagination.css";
+// import "assets/authstyle.css";
 import axios from "axios";
 import AddNoteModal from "Modals/AddNoteModal";
 import Header from "Components/Header";
@@ -28,6 +28,8 @@ function Home() {
   const [totalPages, setTotalPages] = useState(1);
   const [notesPerPage, setNotesPerPage] = useState(6); // Adjust based on your design
   const notesPerPageOptions = [4, 6, 8, 10];
+
+ 
 
   const handleNoteClick = (title, discription, noteId) => {
     navigate(`/notes/${noteId}`);
@@ -103,6 +105,7 @@ function Home() {
         setNotes((prevNotes) =>
           prevNotes.filter((note) => note._id !== selectedNoteId)
         );
+        setVariable(!variable);
         console.log("Note deleted successfully");
       }
       setSelectedNoteId(null);
@@ -141,7 +144,7 @@ function Home() {
     const fetchCategories = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.post(
+        const response = await axios.get(
           "http://localhost:5000/api/categories",
           {
             headers: {
@@ -225,7 +228,7 @@ function Home() {
                     }
                   >
                     <h5 className="card-title">
-                      {note.title} -- {note.categoy?.name}
+                      {note.title} {note.category && <span>-: " {note.category?.name} "</span> }
                     </h5>
                     <p className="text-muted small">
                       {formatDate(note.createdAt)}
@@ -247,11 +250,11 @@ function Home() {
               ))}
             </div>
           </div>
-          <button className="btn add-cat-btn">
+          {/* <button className="btn add-cat-btn">
             <span className="plus-sign">
               <i className="bx bx-duplicate"></i>
             </span>
-          </button>
+          </button> */}
           <button
             className="btn add-note-btn"
             onClick={() => setShowAddNoteModal(true)}
@@ -262,22 +265,18 @@ function Home() {
       </div>
 
       <div className="container">
-        <div className="row">
+        <div className="row" >
           <div className="col-md-12 text-center">
             <div className="pagination-container">
               <div className="results-dropdown mt-3">
                 <span className="results-text"></span>
-                <div className="dropdown">
+                <div className="dropdown"  >
                   <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                     {notesPerPage} 
                   </button>
-                  <ul className="dropdown-menu"> 
-                    {/* <li><a className="dropdown-item" href="#">10</a></li>
-                    <li><a className="dropdown-item" href="#">20</a></li>
-                    <li><a className="dropdown-item" href="#">50</a></li>
-                    <li><a className="dropdown-item" href="#">100</a></li> */}
+                  <ul className="dropdown-menu" > 
                     {notesPerPageOptions.map((page) => (
-                      <li key={page} className="dropdown-item"><button onClick={() =>{setCurrentPage(1); setNotesPerPage(page)}}>
+                      <li key={page} className="dropdown-item" ><button  style={{  width: "100%", textAlign: "center", padding: "5px", border: "2px solid #ccc ", borderRadius: "5px", backgroundColor: "transparent", color: "inherit", fontSize: "14px", fontWeight: "bold", cursor: "pointer"}} onClick={() =>{setCurrentPage(1); setNotesPerPage(page)}}>
                       {page}</button></li>
                     ))}
                   </ul>

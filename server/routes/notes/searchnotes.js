@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 router.post("/", async (req, res) => {
    try {
-    const token = req.body.headers.Authorization?.split(" ")[1]; // 'Bearer <token>'
+    const token = req.body.headers.authorization?.split(" ")[1]; // 'Bearer <token>'
         
         if (!token) {
           return res.status(401).send({ message: "No token provided" });

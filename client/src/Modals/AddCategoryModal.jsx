@@ -1,22 +1,16 @@
 import React from "react";
 // import 'assets/createnote.css';
 
-function AddNoteModal({
-  show,
-  setShow,
-  newNote,
-  setNewNote,
-  handleAddNote,
-  categories,
-}) {
+function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCategory, handleAddCategory }) {
+  
   return (
     <div
-      className={`modal fade ${show ? "show" : ""}`}
+      className={`modal fade ${showCategory ? "show" : ""}`}
       id="addNoteModal"
       tabIndex="-1"
       aria-labelledby="addNoteModalLabel"
-      aria-hidden={!show}
-      style={{ display: show ? "block" : "none" }}
+      aria-hidden={!showCategory}
+      style={{ display: showCategory ? "block" : "none" }}
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
@@ -29,24 +23,24 @@ function AddNoteModal({
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              onClick={() => setShow(false)} // Close the modal
+              onClick={() => setShowCategory(false)} // Close the modal
             ></button>
           </div>
           <div className="modal-body">
             <form>
               <div className="mb-3 text-start">
                 <label htmlFor="noteTitle" className="form-label">
-                  Title
+                  Name
                 </label>
                 <input
                   type="text"
                   className="form-control"
                   id="noteTitle"
-                  value={newNote.title}
+                  value={newCategory.name}
                   onChange={(e) =>
-                    setNewNote({ ...newNote, title: e.target.value })
+                    setNewCategory({ ...newCategory, name: e.target.value })
                   }
-                  placeholder="Enter note title"
+                  placeholder="Enter category name"
                 />
               </div>
               <div className="mb-3 text-start">
@@ -57,11 +51,11 @@ function AddNoteModal({
                   className="form-control"
                   id="noteDescription"
                   rows="3"
-                  value={newNote.description}
+                  value={newCategory.description}
                   onChange={(e) =>
-                    setNewNote({ ...newNote, description: e.target.value })
+                    setNewCategory({ ...newCategory, description: e.target.value })
                   }
-                  placeholder="Enter note description"
+                  placeholder="Enter category description"
                 ></textarea>
               </div>
             </form>
@@ -71,16 +65,16 @@ function AddNoteModal({
               type="button"
               className="btn btn-secondary"
               data-bs-dismiss="modal"
-              onClick={() => setShow(false)} // Close the modal
+              onClick={() => setShowCategory(false)} // Close the modal
             >
               Cancel
             </button>
             <button
               type="button"
               className="btn btn-primary"
-              onClick={handleAddNote} // Call the add note function
+              onClick={handleAddCategory} // Call the add note function
             >
-              Save Category
+              Save
             </button>
           </div>
         </div>
@@ -89,4 +83,4 @@ function AddNoteModal({
   );
 }
 
-export default AddNoteModal;
+export default AddCategoryModal;

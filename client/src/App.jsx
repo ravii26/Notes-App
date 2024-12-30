@@ -9,6 +9,8 @@ const ResetPasswordPage = lazy(() => import("PaaswordAuth/ResetPassword"));
 const VerifyOTPPage = lazy(() => import("PaaswordAuth/VerifyOTP"));
 const NotePage = lazy(() => import("Components/Note")); 
 const CategoriesPage = lazy(() => import("Components/Categories"));
+const ProfilePage = lazy(() => import("Components/Profile"));
+const DevicesPage = lazy(() => import("Components/Devices"));
 
 function App() {
   const user = localStorage.getItem("token");
@@ -24,6 +26,9 @@ function App() {
         <Route path="/verify-otp" element={<VerifyOTPPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/devices" element={<DevicesPage />} />
+        <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
     </>
   )

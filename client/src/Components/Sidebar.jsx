@@ -28,6 +28,18 @@ function Sidebar() {
           <i className="bx bx-category" />
           <span className="nav-text">Categories</span>
         </a>
+          </li>
+          <li className="nav-item">
+        <a
+          href="/devices"
+          className="nav-link"
+          data-bs-toggle="tooltip"
+          data-bs-placement="right"
+          title="Categories"
+        >
+          <i className="bx bx-phone" />
+          <span className="nav-text">Devices</span>
+        </a>
       </li>
     </ul>
   </div>

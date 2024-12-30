@@ -8,7 +8,6 @@ const router = express.Router();
 router.post("/", async (req, res) => {
     try {
         const token = req.body.headers.Authorization?.split(" ")[1]; // 'Bearer <token>'
-            
             if (!token) {
               return res.status(401).send({ message: "No token provided" });
             }

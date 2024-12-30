@@ -3,6 +3,12 @@ import jwt from "jsonwebtoken";
 import Joi from "joi";
 import passwordComplexity from "joi-password-complexity";
 
+const deviceSchema = new mongoose.Schema({
+  deviceId: { type: String, required: true },
+  lastLogin: { type: Date, default: Date.now },
+  deviceName: { type: String },
+});
+
 const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
@@ -11,10 +17,12 @@ const userSchema = new mongoose.Schema({
   otp: { type: String },
   otpExpiry: { type: Date },
   isAdmin: { type: Boolean, default: false },
+  profileImage: { type: String },
+  devices:[deviceSchema],
 });
 
-userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, "sadsfdsfaffsc3332rfa3", {
+userSchema.methods.generateAuthToken = function (deviceId) {
+  const token = jwt.sign({ _id: this._id, deviceId }, "sadsfdsfaffsc3332rfa3", {
     expiresIn: "7d",
   });
   return token;
@@ -33,3 +41,4 @@ const validate = (data) => {
 };
 
 export { User, validate };
+
