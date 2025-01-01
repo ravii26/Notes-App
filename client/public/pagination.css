@@ -1,4 +1,4 @@
-body {
+.body-pagination {
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -34,12 +34,12 @@ body {
     min-width: 80px;
   }
 
-.pagination {
+.pagination-custom {
     display: flex;
     gap: 5px;
   }
 
-.pagination a {
+.pagination-custom a {
     padding: 8px 12px;
     text-decoration: none;
     color: black;
@@ -48,17 +48,17 @@ body {
     cursor: pointer;
   }
 
-.pagination a.active {
+.pagination-custom a.active {
     background-color: #0d6efd;
     color: white;
     border-color: #0d6efd;
   }
 
-.pagination a:hover:not(.active) {
+.pagination-custom a:hover:not(.active) {
     background-color: #a3a3a3;
   }
 
-.page-item.disabled .page-link {
+.page-item-custom.disabled .page-link-custom {
     color: #6c757d; 
     pointer-events: none; 
 }

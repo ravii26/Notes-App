@@ -1,5 +1,4 @@
 import React from "react";
-// import 'assets/createnote.css';
 
 function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCategory, handleAddCategory }) {
   
@@ -13,8 +12,8 @@ function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCa
       style={{ display: showCategory ? "block" : "none" }}
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
+        <div className="modal-content modal-content-custom">
+          <div className="modal-header modal-header-custom">
             <h5 className="modal-title modal-add " id="addNoteModalLabel">
               Add Category
             </h5>
@@ -26,7 +25,7 @@ function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCa
               onClick={() => setShowCategory(false)} // Close the modal
             ></button>
           </div>
-          <div className="modal-body">
+          <div className="modal-body modal-body-custom">
             <form>
               <div className="mb-3 text-start">
                 <label htmlFor="noteTitle" className="form-label">
@@ -60,7 +59,7 @@ function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCa
               </div>
             </form>
           </div>
-          <div className="modal-footer">
+          <div className="modal-footer modal-footer-custom">
             <button
               type="button"
               className="btn btn-secondary"

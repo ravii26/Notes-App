@@ -140,13 +140,6 @@ body {
     border: 2px solid #ccc;
   }
   
-  /* .form-group input {
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: 2px solid #ccc;
-    transition: border-color 0.3s; 
-  } */
-  
   .form-group input:focus {
     border-color: #007bff;
   }

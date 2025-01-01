@@ -5,40 +5,40 @@ function Sidebar() {
     <div className="d-flex">
   <div className="sidebar d-flex flex-column" id="sidebar">
     <ul className="sidebar-nav flex-grow-1">
-      <li className="nav-item">
+      <li className="nav-item nav-item-custom">
         <a
           href="/notes"
-          className="nav-link"
+          className="nav-link nav-link-custom"
           data-bs-toggle="tooltip"
           data-bs-placement="right"
           title="Notes"
         >
           <i className="bx bx-note" />
-          <span className="nav-text">Notes</span>
+          <span className="nav-text nav-text-custom">Notes</span>
         </a>
       </li>
-      <li className="nav-item">
+      <li className="nav-item nav-item-custom">
         <a
           href="/categories"
-          className="nav-link"
+          className="nav-link nav-link-custom"
           data-bs-toggle="tooltip"
           data-bs-placement="right"
           title="Categories"
         >
           <i className="bx bx-category" />
-          <span className="nav-text">Categories</span>
+          <span className="nav-text nav-text-custom">Categories</span>
         </a>
           </li>
-          <li className="nav-item">
+          <li className="nav-item nav-item-custom">
         <a
           href="/devices"
-          className="nav-link"
+          className="nav-link nav-link-custom"
           data-bs-toggle="tooltip"
           data-bs-placement="right"
           title="Categories"
         >
           <i className="bx bx-phone" />
-          <span className="nav-text">Devices</span>
+          <span className="nav-text nav-text-custom">Devices</span>
         </a>
       </li>
     </ul>

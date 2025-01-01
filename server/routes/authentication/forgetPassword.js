@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
     });
     console.log(otp);
 
-    const token = jwt.sign({ email }, "sadsfdsfaffsc3332rfa3", {
+    const token = jwt.sign({ id : user._id }, "sadsfdsfaffsc3332rfa3", {
       expiresIn: "15m",
     });
     res.status(200).send({ token, message: "OTP sent to email" });

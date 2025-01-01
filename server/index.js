@@ -22,8 +22,6 @@ import noteUpdateRoutes from "./routes/notes/noteupdate.js";
 import createCategoryRoutes from "./routes/categories/createcategory.js";
 import categoriesRoutes from "./routes/categories/getcategories.js";
 import deleteCategoryRoutes from "./routes/categories/deletecategory.js";
-// import categoryRoutes from "./routes/categories/category.js";
-// import categoryUpdateRoutes from "./routes/categories/categoryupdate.js";
 
 import profileDataRoutes from "./routes/authentication/profileData.js";
 import profileUpdateRoutes from "./routes/authentication/profileUpdate.js";
@@ -32,12 +30,24 @@ import removeDeviceRoutes from "./routes/authentication/removeDevice.js";
 import getDevicesRoutes from "./routes/authentication/getDevices.js";
 import deleteDeviceRoutes from "./routes/authentication/deleteDevice.js";
 
+// CHANGE
+
+import authenticationRoutes from "./routes/authRoutes.js";
+
+// _________________________________
+
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(bp.json());
 dotenv.config();
 
 connectDB();
+
+// CHANGE
+
+app.use("/api/v1", authenticationRoutes)
+
+// _________________________________
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
@@ -54,8 +64,6 @@ app.use("/api/noteupdate", noteUpdateRoutes);
 app.use("/api/createcategory", createCategoryRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/deletecategory", deleteCategoryRoutes);
-// app.use("/api/category", categoryRoutes);
-// app.use("/api/categoryupdate", categoryUpdateRoutes);
 
 app.use("/api/profile", profileDataRoutes);
 app.use("/api/profileupdate", profileUpdateRoutes);

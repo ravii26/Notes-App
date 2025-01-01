@@ -5,9 +5,10 @@ import { Note } from "../../models/notes.js";
 import { User } from "../../models/user.js";
 
 router.put("/:noteId", async (req, res) => {
-  const { noteId } = req.params;
-  const { title, description } = req.body;
+  
   try {
+    const { noteId } = req.params;
+  const { title, description } = req.body;
     const token = req.body.headers.Authorization?.split(" ")[1]; 
 
     if (!token) {

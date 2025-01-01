@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "assets/pwd.css";
+// --
+// import "assets/pwd.css";
 import { useNavigate } from "react-router-dom";
 const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -15,11 +16,12 @@ const ResetPasswordPage = () => {
       const response = await axios.post(
         `http://localhost:5000/api/resetPassword`,
         {
+          newPassword,
+          confirmPassword,
+        }, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          newPassword,
-          confirmPassword,
         }
       );
       alert(response.data.message);
@@ -34,9 +36,10 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="container">
-      <div className="forms">
-        <div className="form reset-password">
+    <div className="body-pwd">
+       <div className="container container-pwd">
+      <div className="forms-pwd">
+        <div className="form form-pwd reset-password">
           <span className="title"> Reset Password </span>
           <form onSubmit={handleSubmit}>
             <div className="input-field">
@@ -68,6 +71,7 @@ const ResetPasswordPage = () => {
         </div>
       </div>
     </div>
+   </div>
   );
 };
 

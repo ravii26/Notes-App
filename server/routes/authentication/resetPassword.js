@@ -20,12 +20,12 @@ router.post("/", async (req, res) => {
     if (newPassword !== confirmPassword) {
       return res.status(400).send({ message: "Passwords do not match" });
     }
-    const token = req.body.headers.authorization?.split(" ")[1]; // 'Bearer <token>'
+    const token = req.headers.authorization?.split(" ")[1]; // 'Bearer <token>'
     if (!token) {
       return res.status(401).send({ message: "No token provided" });
     }
     const decoded = jwt.verify(token, "sadsfdsfaffsc3332rfa3");
-    const user = await User.findOne({ email: decoded.email }); 
+    const user = await User.findOne({ _id: decoded._id });
 
     if (!user) return res.status(404).send({ message: "User not found" });
 

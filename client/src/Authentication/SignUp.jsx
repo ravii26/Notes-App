@@ -1,5 +1,4 @@
 import React from "react";
-import "../assets/authstyle.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -23,7 +22,7 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:5000/api/users";
+      const url = "http://localhost:5000/api/v1/register";
       const response = await axios.post(url, data);
       console.log(response.data);
       navigate("/notes");
@@ -35,7 +34,8 @@ function SignUp() {
   };
 
   return (
-    <div className="container">
+    <div className="body-auth">
+       <div className="container container-auth">
       <div className="left-panel">
         <div className="branding">
                   <img src={Logo } alt="Company Logo" className="logo" />
@@ -44,7 +44,7 @@ function SignUp() {
         </div>
       </div>
       <div className="forms">
-        <div className="form signup">
+        <div className="form form-auth signup">
           <span className="title">Signup</span>
           <form onSubmit={handleSubmit}>
             <div className="input-field">
@@ -110,6 +110,7 @@ function SignUp() {
         </div>
       </div>
     </div>
+   </div>
   );
 }
 

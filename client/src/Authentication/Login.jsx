@@ -1,12 +1,9 @@
 import React from "react";
-import "assets/authstyle.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Logo from "../assets/logo.svg";
 import { v4 as uuidv4 } from 'uuid';
-
-
 
 function Login() {
   const [logindata, setLoginData] = useState({
@@ -26,7 +23,6 @@ function Login() {
     const getBrowserName = () => {
       const userAgent = navigator.userAgent;
   
-      // Check for different browsers using regular expressions
       if (userAgent.includes("Chrome")) {
           if (userAgent.includes("Edg")) {
               return "Microsoft Edge";
@@ -38,7 +34,7 @@ function Login() {
       }
       if (userAgent.includes("Safari")) {
           if (userAgent.includes("Chrome")) {
-              return "Google Chrome"; // Chrome also contains "Safari" in userAgent
+              return "Google Chrome";
           }
           return "Apple Safari";
       }
@@ -49,7 +45,7 @@ function Login() {
           return "Opera";
       }
   
-      return "Unknown Browser";  // Return if browser is not recognized
+      return "Unknown Browser";
   };  
 
     let deviceId = localStorage.getItem('deviceId');
@@ -67,7 +63,7 @@ function Login() {
     e.preventDefault();
     try {
       logindata.deviceId = generateDeviceId();
-      const url = "http://localhost:5000/api/auth";
+      const url = "http://localhost:5000/api/v1/login";
       const response = await axios.post(url, logindata);
       localStorage.setItem("token", response.data.data);
       navigate("/notes");
@@ -82,10 +78,9 @@ function Login() {
     }
   };
 
-
-
   return (
-    <div className="container">
+    <div className="body-auth">
+      <div className="container container-auth">
       <div className="left-panel">
         <div className="branding">
           <img src={Logo} alt="Company Logo" className="logo" />
@@ -94,7 +89,7 @@ function Login() {
         </div>
       </div>
       <div className="forms">
-        <div className="form login">
+        <div className="form form-auth login">
           <span className="title">Login</span>
           <form onSubmit={handleLogin}>
             <div className="input-field">
@@ -141,6 +136,7 @@ function Login() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

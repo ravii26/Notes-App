@@ -6,7 +6,7 @@ import multer from "multer";
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 }, // Max file size of 5MB (optional)
+  limits: { fileSize: 10 * 1024 * 1024 },
 });
 router.put("/", upload.single("profileImage"), async (req, res) => {
   try {
@@ -16,10 +16,8 @@ router.put("/", upload.single("profileImage"), async (req, res) => {
     if (!user) return res.status(404).send({ message: "User not found" });
     const { firstName, lastName, email } = req.body;
     const updateData = { firstName, lastName, email };
-    
 
     if (req.file) {
-      console.log(req.file.buffer.toString('base64'))
       updateData.profileImage = req.file.buffer.toString('base64');
     }
     const updatedUser = await User.findByIdAndUpdate(user._id, updateData, {

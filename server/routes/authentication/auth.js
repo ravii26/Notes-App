@@ -17,7 +17,6 @@ router.post("/", async (req, res) => {
   try {
     const { email, password, deviceId, browserName } = req.body;
     const { error } = validate({email, password});
-    console.log(deviceId);
     if (error) {
       return res.status(400).send({ message: error.details[0].message });
     }
@@ -40,7 +39,7 @@ router.post("/", async (req, res) => {
     await user.save();
 
     const validPassword = await bcrypt.compare(
-      req.body.password,
+      password,
       user.password
     );
     if (!validPassword) {

@@ -7,7 +7,7 @@
   font-family: "Poppins", sans-serif;
 }
 
-body {
+.body-pwd {
   height: 100vh;
   display: flex;
   align-items: center;
@@ -15,7 +15,7 @@ body {
   background-color: #71b8db;
 }
 
-.container {
+.container-pwd {
   position: relative;
   max-width: 100%;
   width: 350px;
@@ -34,12 +34,12 @@ body {
   justify-content: center;
 }
 
-.form {
+.form-pwd {
   width: 100%;
   max-width: 350px;
 }
 
-.form .title {
+.form-pwd .title {
   position: relative;
   font-size: 27px;
   font-weight: 600;
@@ -87,14 +87,14 @@ body {
   left: 0;
 }
 
-.form .button {
+.form-pwd .button {
   margin-top: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.form .button input {
+.form-pwd .button input {
   border: none;
   color: #fff;
   font-size: 17px;
@@ -116,7 +116,7 @@ body {
     flex-direction: column;
   }
 
-  .form .title {
+  .form-pwd .title {
     font-size: 22px;
   }
 }

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "assets/categories.css";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import "assets/notes.css";
-import "assets/sidebar.css";
 import AddCategoryModal from "Modals/AddCategoryModal";
 import { useNavigate } from "react-router-dom";
 
@@ -122,9 +119,7 @@ function Categories() {
         <div className="container ">
           <div className="d-flex justify-content-center">
             <div className="input-group" style={{ maxWidth: 300 }}>
-              {/* <span className="input-group-text" id="basic-addon1">
-                  <i className="bx bx-search" />
-                </span> */}
+
               <input
                 type="text"
                 className="form-control"
@@ -186,9 +181,6 @@ function Categories() {
             <i className="bx bx-duplicate"></i>
           </span>
         </button>
-        {/* <button className="btn add-note-btn">
-          <span className="plus-sign">+</span>
-        </button> */}
       </div>
       <AddCategoryModal
         showCategory={showAddCategoryModal}

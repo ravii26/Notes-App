@@ -12,12 +12,14 @@ router.get("/", async (req, res) => {
     if (!token) {
       return res.status(400).send({ message: "No token provided" });
     }
-    const decoded = jwt.verify(token, "sadsfdsfaffsc3332rfa3");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ _id: decoded._id });
 
     if (!user) return res.status(404).send({ message: "User not found" });
-    // const device = user.devices.find((device) => device.deviceId === decoded.deviceId);
-    // if (!device) return res.status(404).send({ message: "Device not found" });
+    const device = user.devices.find(
+      (device) => device.deviceId === decoded.deviceId
+    );
+    if (!device) return res.status(404).send({ message: "Device not found" });
     const categories = await Category.find({ user: user._id });
 
     if (!categories)

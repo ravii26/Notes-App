@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../assets/otp.css";
-
 const VerifyOTPPage = () => {
   const navigate = useNavigate();
 
@@ -64,29 +62,31 @@ const VerifyOTPPage = () => {
   };
 
   return (
-    <div className="container">
-      <div className="forms">
-        <div className="form otp-verification">
-          <span className="title">OTP Verification</span>
-          <form onSubmit={handleSubmit}>
-            <div className="otp-fields">
-              {otp.map((value, index) => (
-                <input
-                  key={index}
-                  ref={(el) => (inputRefs.current[index] = el)} // Store input refs
-                  type="text"
-                  maxLength={1}
-                  className="otp-input"
-                  value={value}
-                  onChange={(e) => handleChange(e, index)}
-                  onKeyDown={(e) => handleKeyDown(e, index)}
-                />
-              ))}
-            </div>
-            <div className="input-field button">
-              <input type="submit" value="Verify OTP" />
-            </div>
-          </form>
+    <div className="body-pwd">
+      <div className="container container-pwd">
+        <div className="form" style={{ width: "100%", padding: "25px" }}>
+          <div className="form form-pwd otp-verification">
+            <span className="title">OTP Verification</span>
+            <form onSubmit={handleSubmit}>
+              <div className="otp-fields">
+                {otp.map((value, index) => (
+                  <input
+                    key={index}
+                    ref={(el) => (inputRefs.current[index] = el)} // Store input refs
+                    type="text"
+                    maxLength={1}
+                    className="otp-input"
+                    value={value}
+                    onChange={(e) => handleChange(e, index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                  />
+                ))}
+              </div>
+              <div className="input-field button">
+                <input type="submit" value="Verify OTP" />
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

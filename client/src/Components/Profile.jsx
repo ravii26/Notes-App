@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import "assets/user.css";
-import "assets/sidebar.css";
 import axios from "axios";
 
 function Profile() {
@@ -110,7 +108,7 @@ function Profile() {
               <span>Details</span>
             </div>
             <form>
-              <div className="form-group mb-3">
+              <div className="form-group form-group-custom mb-3">
                 <label htmlFor="firstName">First Name:</label>
                 <input
                   type="text"
@@ -123,7 +121,7 @@ function Profile() {
                 />
                 <i className="bx bx-pencil input-icon" />
               </div>
-              <div className="form-group mb-3">
+              <div className="form-group form-group-custom mb-3">
                 <label htmlFor="lastName">Last Name:</label>
                 <input
                   type="text"
@@ -135,7 +133,7 @@ function Profile() {
                 />
                 <i className="bx bx-pencil input-icon" />
               </div>
-              <div className="form-group mb-3">
+              <div className="form-group form-group-custom mb-3">
                 <label htmlFor="email">Email:</label>
                 <input
                   type="email"

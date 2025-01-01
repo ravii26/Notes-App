@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "assets/user.css";
-
 function Header() {
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -47,14 +45,14 @@ function Header() {
 
   return (
     <nav
-      className="navbar navbar-expand-lg text-white shadow-m px-3"
+      className="navbar navbar-custom navbar-expand-lg text-white shadow-md px-3"
       style={{
         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
       }}
     >
       <div className="container-fluid">
         <a href="/notes" style={{ textDecoration: "none" }}>
-          <h1 className="navbar-brand text-white mb-0">
+          <h1 className="navbar-brand navbar-brand-custom text-white mb-0">
             <i className="bx bx-notepad"></i>Notes
           </h1>
         </a>

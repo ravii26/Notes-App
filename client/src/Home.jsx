@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "assets/notes.css";
-import "assets/sidebar.css";
-// import "assets/authstyle.css";
 import axios from "axios";
 import AddNoteModal from "Modals/AddNoteModal";
 import Header from "Components/Header";
@@ -177,7 +174,7 @@ function Home() {
   };
 
   return (
-    <>
+    <div className="body-home">
       <div>
         {/* Navbar */}
         <Header />
@@ -250,11 +247,6 @@ function Home() {
               ))}
             </div>
           </div>
-          {/* <button className="btn add-cat-btn">
-            <span className="plus-sign">
-              <i className="bx bx-duplicate"></i>
-            </span>
-          </button> */}
           <button
             className="btn add-note-btn"
             onClick={() => setShowAddNoteModal(true)}
@@ -264,7 +256,7 @@ function Home() {
         </div>
       </div>
 
-      <div className="container">
+      <div className="body-pagination"><div className="container ">
         <div className="row" >
           <div className="col-md-12 text-center">
             <div className="pagination-container">
@@ -283,18 +275,18 @@ function Home() {
                 </div>
               </div>
               <nav aria-label="Page navigation">
-                <ul className="pagination justify-content-center">
-                  <li className="page-item ">
-                    <button className="page-link" onClick={() => { if (currentPage > 1) setCurrentPage(currentPage - 1);}}>
+                <ul className="pagination pagination-custom justify-content-center">
+                  <li className="page-item page-item-custom">
+                    <button className="page-link page-link-custom" onClick={() => { if (currentPage > 1) setCurrentPage(currentPage - 1);}}>
                       <span>«</span>
                     </button>
                   </li>
 
                   {Array.from({ length: totalPages }, (_, index) => (
-                    <li key={index} className={`page-item ${index + 1 === currentPage ? 'active' : ''}`}>
-                      <button className="page-link" onClick={() => handlePageChange(index + 1)} >{index+1 } </button></li>
-                  ))}                 <li className="page-item">
-                    <button className="page-link" onClick={() => { if (currentPage < totalPages) setCurrentPage(currentPage + 1);}}>
+                    <li key={index} className={`page-item page-item-custom ${index + 1 === currentPage ? 'active' : ''}`}>
+                      <button className="page-link page-link-custom" onClick={() => handlePageChange(index + 1)} >{index+1 } </button></li>
+                  ))}                 <li className="page-item page-item-custom">
+                    <button className="page-link page-link-custom" onClick={() => { if (currentPage < totalPages) setCurrentPage(currentPage + 1);}}>
                       <span>»</span>
                     </button>
                   </li>
@@ -303,7 +295,7 @@ function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div></div>
 
       {/* Delete Modal */}
       <div
@@ -314,14 +306,14 @@ function Home() {
         aria-hidden="true"
       >
         <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
+          <div className="modal-content modal-content-custom">
+            <div className="modal-header modal-header-custom">
               <h5 className="modal-title text-center">Delete Note</h5>
             </div>
-            <div className="modal-body">
+            <div className="modal-body modal-body-custom">
               Are you sure you want to delete this note?
             </div>
-            <div className="modal-footer">
+            <div className="modal-footer modal-footer-custom">
               <button
                 type="button"
                 className="btn-m btn-cancel-m"
@@ -349,7 +341,7 @@ function Home() {
         handleAddNote={handleAddNote}
         categories={categories}
       />
-    </>
+    </div>
   );
 }
 

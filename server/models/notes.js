@@ -1,33 +1,33 @@
 import mongoose from "mongoose";
 
 const noteSchema = new mongoose.Schema({
-    user: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Reference to the User collection
-    required: true
+    ref: "User", // Reference to the User collection
+    required: true,
   },
   title: {
     type: String,
     required: true,
-    maxlength: 255
+    maxlength: 255,
   },
   description: {
     type: String,
-    default: ''
+    default: "",
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updatedAt: {
-    type: Date
+    type: Date,
   },
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category'
-  }
-})
+    ref: "Category",
+  },
+});
 
 const Note = mongoose.model("Note", noteSchema);
 
-export { Note }
+export { Note };

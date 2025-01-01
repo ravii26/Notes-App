@@ -1,5 +1,4 @@
 import React from "react";
-import "assets/deletemodal.css"
 
 function DeleteModal({ selectedNoteId, handleDelete }) {
   return (
@@ -11,14 +10,14 @@ function DeleteModal({ selectedNoteId, handleDelete }) {
       aria-hidden="true"
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
+        <div className="modal-content modal-content-custom">
+          <div className="modal-header modal-header-custom">
             <h5 className="modal-title text-center">Delete Note</h5>
           </div>
-          <div className="modal-body">
+          <div className="modal-body modal-body-custom">
             Are you sure you want to delete this note?
           </div>
-          <div className="modal-footer">
+          <div className="modal-footer modal-footer-custom">
             <button
               type="button"
               className="btn btn-cancel"

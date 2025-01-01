@@ -13,8 +13,9 @@ router.get("/", async (req, res) => {
       const base64Image = user.profileImage.toString("base64");
       user.profileImage = `data:image/png;base64,${base64Image}`;
     }
-    
+    console.log(user);
     res.status(200).send({ user });
+    
   } catch (err) {
     console.log(err);
     res.status(500).send("Server Error");

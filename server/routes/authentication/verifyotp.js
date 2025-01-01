@@ -11,8 +11,6 @@ router.post("/", async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    console.log(user);
-
     if (!user || user._doc.otp !== otp) {
       return res.status(400).send({ message: "Invalid OTP or Email" });
     }
@@ -24,8 +22,9 @@ router.post("/", async (req, res) => {
     user.otp = null;
     user.otpExpiry = null;
     await user.save();
+    const id = user._id;
 
-    const resetToken = jwt.sign({ email }, "sadsfdsfaffsc3332rfa3", {
+    const resetToken = jwt.sign({ _id: id }, "sadsfdsfaffsc3332rfa3", {
       expiresIn: "15m",
     });
     res

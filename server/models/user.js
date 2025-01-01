@@ -18,11 +18,11 @@ const userSchema = new mongoose.Schema({
   otpExpiry: { type: Date },
   isAdmin: { type: Boolean, default: false },
   profileImage: { type: String },
-  devices:[deviceSchema],
+  devices: [deviceSchema],
 });
 
 userSchema.methods.generateAuthToken = function (deviceId) {
-  const token = jwt.sign({ _id: this._id, deviceId }, "sadsfdsfaffsc3332rfa3", {
+  const token = jwt.sign({ _id: this._id, deviceId }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
   return token;
@@ -41,4 +41,3 @@ const validate = (data) => {
 };
 
 export { User, validate };
-

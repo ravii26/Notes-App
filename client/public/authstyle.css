@@ -6,7 +6,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-body {
+.body-auth {
     height: 100vh;
     display: flex;
     align-items: center;
@@ -17,7 +17,7 @@ body {
 }
 
 /* Main Container */
-.container {
+.container-auth {
     position: relative;
     max-width: 750px;
     width: 100%;
@@ -77,12 +77,12 @@ body {
     border-radius: 0px 30px 30px 0px;
 }
 
-.form {
+.form-auth {
     width: 100%;
     max-width: 350px;
 }
 
-.form .title {
+.form-auth .title {
     position: relative;
     font-size: 27px;
     font-weight: 600;
@@ -136,28 +136,28 @@ body {
     padding: 10px;
 }
 
-.form .text {
+.form-auth .text {
     color: #333;
     font-size: 14px;
 }
 
-.form a.text {
+.form-auth a.text {
     color: #4070f4;
     text-decoration: none;
 }
 
-.form a:hover {
+.form-auth a:hover {
     text-decoration: underline;
 }
 
-.form .button {
+.form-auth .button {
     margin-top: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.form .button input {
+.form-auth .button input {
     border: none;
     color: #fff;
     font-size: 17px;
@@ -187,7 +187,7 @@ body {
 
 /* Responsiveness */
 @media screen and (max-width: 768px) {
-    .container {
+    .container-auth {
         flex-direction: column;
         max-width: 100%;
     }
@@ -204,7 +204,7 @@ body {
         justify-content: center;
     }
 
-    .form .title {
+    .form-auth .title {
         font-size: 24px;
         text-align: center;
     }
@@ -213,7 +213,7 @@ body {
         font-size: 14px;
     }
 
-    .form .button input {
+    .form-auth .button input {
         font-size: 16px;
     }
 
@@ -232,7 +232,7 @@ body {
 }
 
 @media screen and (max-width: 480px) {
-    .container {
+    .container-auth {
         flex-direction: column;
         padding: 10px;
     }
@@ -245,7 +245,7 @@ body {
         padding: 10px;
     }
 
-    .form .title {
+    .form-auth .title {
         font-size: 20px;
     }
 
@@ -253,7 +253,7 @@ body {
         font-size: 12px;
     }
 
-    .form .button input {
+    .form-auth .button input {
         font-size: 14px;
     }
 }

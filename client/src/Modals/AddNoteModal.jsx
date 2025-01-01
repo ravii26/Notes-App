@@ -1,5 +1,4 @@
 import React from "react";
-// import 'assets/createnote.css';
 
 function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categories }) {
   
@@ -13,8 +12,8 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
       style={{ display: show ? "block" : "none" }}
     >
       <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
+        <div className="modal-content modal-content-custom">
+          <div className="modal-header modal-header-custom">
             <h5 className="modal-title modal-add " id="addNoteModalLabel">
               Add Note
             </h5>
@@ -26,7 +25,7 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               onClick={() => setShow(false)} // Close the modal
             ></button>
           </div>
-          <div className="modal-body">
+          <div className="modal-body modal-body-custom">
             <form>
               <div className="mb-3 text-start">
                 <label htmlFor="noteTitle" className="form-label">
@@ -74,7 +73,7 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               </div>
             </form>
           </div>
-          <div className="modal-footer">
+          <div className="modal-footer modal-footer-custom">
             <button
               type="button"
               className="btn btn-secondary"

@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { lazy } from "react";
+import "assets/styles.css";
 
 const LoginPage = lazy(() => import("Authentication/Login"));
 const SignUpPage = lazy(() => import("Authentication/SignUp"));

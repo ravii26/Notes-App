@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "assets/categories.css";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import "assets/notes.css";
-import "assets/sidebar.css";
 import axios from "axios";
 
 function Devices() {

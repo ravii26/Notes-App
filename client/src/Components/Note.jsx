@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import "assets/note.css";
 import Header from "Components/Header";
 import Sidebar from "Components/Sidebar";
 
@@ -129,7 +128,7 @@ function Note() {
       <Sidebar/>
       <div className="main-content">
       <h5
-        className="heading"
+        className="heading-note"
         contentEditable="true"
         suppressContentEditableWarning={true}
         ref={titleRef}
@@ -140,7 +139,7 @@ function Note() {
       </h5>
 
       <p
-        className="description"
+        className="description-note"
         contentEditable="true"
         suppressContentEditableWarning={true}
         ref={descriptionRef}

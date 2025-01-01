@@ -24,6 +24,17 @@ body {
     display: flex;
 }
 
+.container-pwd {
+    position: relative;
+    max-width: 100%;
+    width: 350px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+  }
+
 .forms {
     flex: 1;
     padding: 30px;
