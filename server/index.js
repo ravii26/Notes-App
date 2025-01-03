@@ -34,6 +34,8 @@ import deleteDeviceRoutes from "./routes/authentication/deleteDevice.js";
 
 import authenticationRoutes from "./routes/authRoutes.js";
 
+import productRoutes from "./routes/productRoutes.js";
+
 // _________________________________
 
 app.use(cors());
@@ -46,6 +48,8 @@ connectDB();
 // CHANGE
 
 app.use("/api/v1", authenticationRoutes)
+
+app.use("/api/v1", productRoutes);
 
 // _________________________________
 

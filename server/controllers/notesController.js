@@ -3,7 +3,7 @@ import { validateNote } from "../utils/validations.js";
 
 const getNotes = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.params.user;
 
     const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = Math.max(1, parseInt(req.query.limit) || 10);
@@ -42,7 +42,7 @@ const getNotes = async (req, res) => {
 
 const createNote = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.body.user;
     const { title, description, category } = req.body;
 
     const { error } = validateNote({ title, description });
@@ -117,7 +117,7 @@ const updateNote = async (req, res) => {
 
 const searchNotes = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.body.user;
 
     const searchText = req.body.searchText;
     const notes = await Note.find({

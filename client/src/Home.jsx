@@ -141,6 +141,7 @@ function Home() {
     const fetchCategories = async () => {
       try {
         const token = localStorage.getItem("token");
+        console.log(token);
         const response = await axios.get(
           "http://localhost:5000/api/categories",
           {
@@ -182,7 +183,7 @@ function Home() {
 
         {/* Notes Grid */}
         <div className="main-content">
-          <div className="container ">
+          <div className=" ">
             <div className="d-flex justify-content-center">
               <div className="input-group" style={{ maxWidth: 300 }}>
                 {/* <span className="input-group-text" id="basic-addon1">

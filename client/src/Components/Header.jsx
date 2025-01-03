@@ -7,12 +7,12 @@ function Header() {
     const token = localStorage.getItem("token");
     const deviceId = localStorage.getItem("deviceId");
     try {
-      await axios.post(
-        "http://localhost:5000/api/logout",
-        { deviceId,  headers: {
+      await axios.post("http://localhost:5000/api/logout", {
+        deviceId,
+        headers: {
           Authorization: `Bearer ${token}`,
-        }, },
-      );
+        },
+      });
       localStorage.removeItem("token");
       localStorage.removeItem("deviceId");
       navigate("/");
@@ -48,6 +48,7 @@ function Header() {
       className="navbar navbar-custom navbar-expand-lg text-white shadow-md px-3"
       style={{
         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        zIndex: 1000,
       }}
     >
       <div className="container-fluid">

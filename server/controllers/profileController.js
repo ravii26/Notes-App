@@ -2,7 +2,7 @@ import User from "../models/user.js";
 
 const getProfile = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.params.user;
     if (Buffer.isBuffer(user.profileImage)) {
       const base64Image = user.profileImage.toString("base64");
       user.profileImage = `data:image/png;base64,${base64Image}`;
@@ -16,7 +16,7 @@ const getProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => { 
     try {
-        const user = req.user;
+        const user = req.body.user;
         const { firstName, lastName, email } = req.body;
         const updateData = { firstName, lastName, email };
     

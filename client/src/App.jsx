@@ -12,6 +12,8 @@ const NotePage = lazy(() => import("Components/Note"));
 const CategoriesPage = lazy(() => import("Components/Categories"));
 const ProfilePage = lazy(() => import("Components/Profile"));
 const DevicesPage = lazy(() => import("Components/Devices"));
+const ProductsPage = lazy(() => import("Components/Products"));
+const AddProductPage = lazy(() => import("Components/AddProduct"));
 
 function App() {
   const user = localStorage.getItem("token");
@@ -29,6 +31,8 @@ function App() {
         <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/devices" element={<DevicesPage />} />
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/add-product" element={<AddProductPage />} />
         <Route path="*" element={<h1>Not Found</h1>} />
       </Routes>
     </>

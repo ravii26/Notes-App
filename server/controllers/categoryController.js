@@ -2,7 +2,7 @@ import Category from "../models/category.js";
 
 const getCategories = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.params.user;
     const categories = await Category.find({ user: user._id });
 
     if (!categories)
@@ -17,7 +17,7 @@ const getCategories = async (req, res) => {
 
 const createCategory = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.body.user;
 
     const { name, description } = req.body;
     const category = new Category({ name, description, user: user._id });

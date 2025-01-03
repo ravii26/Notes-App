@@ -913,3 +913,25 @@ h3 {
   color: #6c757d;
   pointer-events: none;
 }
+
+.body-add-product {
+  background-color: #f1f1f2;
+  font-family: Arial, sans-serif;
+  margin-left: 215px;
+}
+.required:after {
+  content: "*";
+  color: red;
+  margin-left: 2px;
+}
+.indgredientLogo {
+  object-fit: contain;
+  width: 250px;
+  height: 150px;
+}
+
+@media screen and (max-width: 768px) {
+  .body-add-product {
+    margin-left: 100px;
+  }
+}

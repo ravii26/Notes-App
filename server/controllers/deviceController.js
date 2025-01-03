@@ -1,6 +1,6 @@
 const getDevices = async (req, res) => {
   try {
-    const user = req.user;
+    const user = req.params.user;
     res.status(200).send({ devices: user.devices });
   } catch (error) {
     console.error(error);
@@ -11,12 +11,15 @@ const getDevices = async (req, res) => {
 const removeDevice = async (req, res) => {
   try {
     let deviceId;
+    let user;
     if (req.method === "POST") {
       deviceId = req.body.deviceId;
+      user = req.body.user;
     } else {
       deviceId = req.query.deviceId;
+      user = req.params.user;
     }
-    const user = req.user;
+    
     user.devices = user.devices.filter(
       (device) => device.deviceId !== deviceId
     );

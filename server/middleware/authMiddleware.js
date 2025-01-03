@@ -8,9 +8,15 @@ const isAuthentic = async (req, res, next) => {
       return res.status(401).send({ message: "No token provided" });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findOne({ _id: decoded._id });
-    const user = req.user;
-    if (!user) return res.status(404).send({ message: "User not found" });
+    if (!decoded) return res.status(401).send({ message: "Invalid token" });
+    if (req.method === "GET") {
+      req.params.user = await User.findOne({ _id: decoded._id });
+    } else {
+      req.body.user = await User.findOne({ _id: decoded._id });
+    }
+    if (!req.body.user && !req.params.user)
+      return res.status(404).send({ message: "User not found!" });
+    const user = req.body.user || req.params.user;
 
     const device = user.devices.find(
       (device) => device.deviceId === decoded.deviceId
@@ -18,6 +24,7 @@ const isAuthentic = async (req, res, next) => {
     if (!device) return res.status(404).send({ message: "Device not found" });
     next();
   } catch (error) {
+    console.error("Error authenticating user:", error);
     res.status(502).send({ message: error.message });
   }
 };

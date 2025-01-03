@@ -37,8 +37,20 @@ function Sidebar() {
           data-bs-placement="right"
           title="Categories"
         >
-          <i className="bx bx-phone" />
+          <i className="bx bxs-devices" />
           <span className="nav-text nav-text-custom">Devices</span>
+        </a>
+          </li>
+          <li className="nav-item nav-item-custom">
+        <a
+          href="/products"
+          className="nav-link nav-link-custom"
+          data-bs-toggle="tooltip"
+          data-bs-placement="right"
+          title="Categories"
+        >
+          <i className="bx bx-food-menu" />
+          <span className="nav-text nav-text-custom">Products</span>
         </a>
       </li>
     </ul>
