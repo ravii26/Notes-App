@@ -1,6 +1,4 @@
 import React from 'react'
-import Header from './Header'
-import Sidebar from './Sidebar'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
@@ -48,8 +46,6 @@ function Products() {
   };
   return (
     <div>
-    <Header />
-    <Sidebar />
     <div className="container main-content " style={{ marginLeft: "230px" }}>
       {/* <div className="container ">
         <div className="d-flex justify-content-center">
@@ -75,7 +71,7 @@ function Products() {
             fontSize: "25px",
           }}
         >
-          No Categories available
+          No Products available
         </h1>
       )}
       {products.length > 0 && (

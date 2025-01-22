@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
 import axios from "axios";
 
 function Profile() {
@@ -25,7 +23,7 @@ function Profile() {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/profile`, {
+        const { data } = await axios.get(`http://localhost:5000/api/v1/get-profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -53,7 +51,7 @@ function Profile() {
 
     try {
       const { data } = await axios.put(
-        `http://localhost:5000/api/profileupdate`,
+        `http://localhost:5000/api/v1/update-profile`,
         profile,
         {
           headers: {
@@ -72,8 +70,6 @@ function Profile() {
   };
   return (
     <div>
-      <Header />
-      <Sidebar />
       <div className="container mt-5">
         <div className="row">
           {/* Profile Picture */}

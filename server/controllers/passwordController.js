@@ -1,13 +1,11 @@
-import User from "../models/userModel.js";
-import nodemailer from "nodemailer";
+import { User } from "../models/user.js";
 import { otpJwtToken } from "../utils/generateJwtToken.js";
 import { validatePassword } from "../utils/validations.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { sendEmail } from "../utils/sendEmail.js";
+import { sendEmail } from "../services/sendEmail.js";
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000);
-
 
 const forgetPassword = async (req, res) => {
   try {
@@ -24,13 +22,13 @@ const forgetPassword = async (req, res) => {
       return res.status(404).send({ message: "User not found" });
     }
 
-    await sendEmail(email, "Password Reset OTP", `Your OTP for password reset is ${otp}. It will expire in 10 minutes.`);
+    // await sendEmail(email, "Password Reset OTP", `Your OTP for password reset is ${otp}. It will expire in 10 minutes.`);
 
     console.log(otp);
 
-    const token = otpJwtToken({ id: user._id });
+    const token = otpJwtToken(user);
 
-    res.status(200).send({ token, message: "OTP sent to email" });
+    res.status(200).send({ token, message: "OTP sent to email", otp });
   } catch (error) {
     console.log(error);
     res.status(502).send({ message: "There is problem in server" });
@@ -55,7 +53,7 @@ const verifyOtp = async (req, res) => {
     user.otpExpiry = null;
     await user.save();
 
-    const resetToken = otpJwtToken({ id : user._id });
+    const resetToken = otpJwtToken(user);
     res
       .status(200)
       .send({ token: resetToken, message: "OTP verified successfully" });
@@ -98,4 +96,4 @@ const resetPassword = async (req, res) => {
   }
 };
 
-export default { forgetPassword, verifyOtp, resetPassword };
+export { forgetPassword, verifyOtp, resetPassword };

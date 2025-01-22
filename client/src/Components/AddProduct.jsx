@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +6,7 @@ function AddProduct() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
-  // const [image, setImage] = useState("");
+  const [image, setImage] = useState("");
 
   const navigate = useNavigate();
 
@@ -100,6 +98,12 @@ function AddProduct() {
     });
   };
 
+  const handleImageChange = (file) => {
+    fileToBase64(file, (base64) => {
+      setImage(base64.slice(22));
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -110,6 +114,7 @@ function AddProduct() {
       data.price = price;
       data.ingredients = ingredients;
       data.variantsGroups = variantsGroups;
+      data.image = image;
       console.log(data);
       if (window.location.href.split("?").pop().startsWith("id")) {
         console.log("Edit product");
@@ -126,7 +131,7 @@ function AddProduct() {
         );
         if (response.status === 200) {
           alert("Product updated successfully");
-          navigate("/notes");
+          navigate("/products");
         }
       } else {
         const response = await axios.post(
@@ -141,7 +146,7 @@ function AddProduct() {
         );
         console.log(response);
         if (response.status === 200) {
-          navigate("/notes");
+          navigate("/products");
         }
       }
     } catch (error) {
@@ -157,38 +162,32 @@ function AddProduct() {
     if (window.location.href.split("?").pop().startsWith("id")) {
       console.log("Edit product");
       const id = window.location.href.split("?").pop().slice(3);
-      const response = axios.get(
-        `http://localhost:5000/api/v1/get-product/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      response.then((response) => {
-        const product = response.data.product;
-        console.log(product.name);
-        setName(product.name);
-        setDescription(product.description);
-        setPrice(product.price);
-        setIngredients(product.ingredients);
-        setVariantsGroups(product.variantsGroup);
-      });
-
-      if (response.status === 200) {
-        setName(response.product.name);
-        setDescription(response.product.description);
-        setPrice(response.product.price);
-        setIngredients(response.product.ingredients);
-        setVariantsGroups(response.product.variantsGroup);
+      try {
+        const response = axios.get(
+          `http://localhost:5000/api/v1/get-product/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        response.then((response) => {
+          const product = response.data.product;
+          setName(product.name);
+          setDescription(product.description);
+          setPrice(product.price);
+          setImage(product.image);
+          setIngredients(product.ingredients);
+          setVariantsGroups(product.variantsGroup);
+        });
+      } catch (error) {
+        console.error("Error creating product:", error);
       }
     }
   }, [navigate]);
 
   return (
     <div>
-      <Header />
-      <Sidebar />
       <div className="container my-5 body-add-product">
         <h1 className="mb-4">Edit Products</h1>
         <div className="row">
@@ -237,7 +236,6 @@ function AddProduct() {
                     placeholder="Enter price"
                     onChange={(e) => setPrice(e.target.value)}
                     value={price}
-
                   />
                 </div>
               </div>
@@ -250,7 +248,17 @@ function AddProduct() {
               <div className="col-md-12 text-center">
                 <label htmlFor="image1">
                   <img
-                    src="https://placehold.co/400x250"
+                    style={{
+                      cursor: "pointer",
+                      height: "250px",
+                      width: "400px",
+                      objectFit: "contain",
+                    }}
+                    src={
+                      image
+                        ? `data:image/png;base64,${image}`
+                        : "https://placehold.co/400x250"
+                    }
                     alt="Click to upload"
                     className="img-thumbnail"
                   />
@@ -259,6 +267,7 @@ function AddProduct() {
                     id="image1"
                     className="d-none"
                     accept="image/*"
+                    onChange={(e) => handleImageChange(e.target.files[0])}
                   />
                 </label>
               </div>
@@ -402,10 +411,11 @@ function AddProduct() {
                 <div className="col-md-4">
                   <button
                     type="button"
-                    className="btn btn-danger btn-sm mx-2"
+                    className="btn btn-danger mx-2 btn-sm rounded-circle "
+                    style={{ height: "20px", width: "20px", padding: "0" }}
                     onClick={() => handleRemoveIngredient(index)}
                   >
-                    <i className="bx bx-minus" />
+                    <i className="bx bx-x" />
                   </button>
                   <label htmlFor={`logo-${index}`}>Logo</label>
                   <div className="text-center">
@@ -496,7 +506,9 @@ function AddProduct() {
             type="submit"
             className="btn btn-primary btn-sm mx-2"
             onClick={handleSubmit}
-          >Submit</button>
+          >
+            Submit
+          </button>
           <button type="button" className="btn btn-secondary">
             Cancel
           </button>

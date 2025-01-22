@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
 import AddCategoryModal from "Modals/AddCategoryModal";
 import { useNavigate } from "react-router-dom";
 
@@ -27,13 +25,14 @@ function Categories() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/createcategory",
+        "http://localhost:5000/api/v1/create-category",
         {
           ...newCategory,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+         
+        },
+        {headers: {
+          Authorization: `Bearer ${token}`,
+        },}
       );
       console.log("Hello");
       if (response.status === 201) {
@@ -56,8 +55,8 @@ function Categories() {
     }
 
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/deletecategory?categoryId=${categoryId}`,
+      const response = await axios.delete(
+        `http://localhost:5000/api/v1/delete-category?categoryId=${categoryId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -82,7 +81,7 @@ function Categories() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:5000/api/categories",
+          "http://localhost:5000/api/v1/get-categories",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -115,12 +114,10 @@ function Categories() {
 
   return (
     <div>
-      <Header />
-      <Sidebar />
-      <div className="container main-content " style={{ marginLeft: "230px" }}>
+      <div className="container main-content" >
         <div className="container ">
           <div className="d-flex justify-content-center">
-            <div className="input-group" style={{ maxWidth: 300 }}>
+            <div className="input-group">
               <input
                 type="text"
                 className="form-control"
@@ -147,8 +144,8 @@ function Categories() {
         )}
         {categories.length > 0 && (
           <table
-            className="category-table-c table-responsive table table-bordered"
-            style={{ marginTop: "20px", width: "800px" }}
+            className="category-table-c table-responsive table-responsive-sm table table-bordered"
+            style={{ marginTop: "20px" }}
           >
             <thead>
               <tr>

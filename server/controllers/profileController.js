@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import {User} from "../models/user.js";
 
 const getProfile = async (req, res) => {
   try {
@@ -15,14 +15,17 @@ const getProfile = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => { 
-    try {
-        const user = req.body.user;
+  try {
+    const user = req.body.user;
+    
+    if (!user) return res.status(404).send({ message: "User not found" });
         const { firstName, lastName, email } = req.body;
-        const updateData = { firstName, lastName, email };
+      const updateData = { firstName, lastName, email };
     
         if (req.file) {
           updateData.profileImage = req.file.buffer.toString('base64');
-        }
+      }
+      
         const updatedUser = await User.findByIdAndUpdate(user._id, updateData, {
           new: true,
         });

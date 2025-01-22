@@ -18,7 +18,7 @@ const isAuthentic = async (req, res, next) => {
       return res.status(404).send({ message: "User not found!" });
     const user = req.body.user || req.params.user;
 
-    const device = user.devices.find(
+    const device = await user.devices.find(
       (device) => device.deviceId === decoded.deviceId
     );
     if (!device) return res.status(404).send({ message: "Device not found" });

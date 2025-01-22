@@ -7,8 +7,10 @@ function Header() {
     const token = localStorage.getItem("token");
     const deviceId = localStorage.getItem("deviceId");
     try {
-      await axios.post("http://localhost:5000/api/logout", {
+      await axios.post("http://localhost:5000/api/v1/logout-device", {
         deviceId,
+       
+      }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -26,7 +28,7 @@ function Header() {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/profile`, {
+        const { data } = await axios.get(`http://localhost:5000/api/v1/get-profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

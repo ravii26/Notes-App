@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
 import axios from "axios";
 
 function Devices() {
@@ -16,7 +14,7 @@ function Devices() {
     const token = localStorage.getItem("token");
     try {
       const getdevices = async () => {
-        const response = await axios.get("http://localhost:5000/api/devices", {
+        const response = await axios.get("http://localhost:5000/api/v1/get-devices", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -32,7 +30,7 @@ function Devices() {
     const handleDelete = async (deviceId) => {
         const token = localStorage.getItem("token");
         try {   
-            const response = await axios.get(`http://localhost:5000/api/deletedevice?deviceId=${deviceId}`, {
+            const response = await axios.get(`http://localhost:5000/api/v1/remove-device?deviceId=${deviceId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -48,8 +46,6 @@ function Devices() {
 
   return (
     <div>
-      <Header />
-      <Sidebar />
       <div className="container main-content " style={{ marginLeft: "230px" }}>
         <div className="container ">
           <div className="d-flex justify-content-center">

@@ -12,7 +12,7 @@ const ForgotPasswordPage = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/forgetPassword`,
+        `http://localhost:5000/api/v1/forgot-password`,
         { email }
       );
       localStorage.setItem("email", email);

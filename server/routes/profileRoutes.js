@@ -10,6 +10,6 @@ const upload = multer({
 });
 
 router.get("/get-profile", isAuthentic, getProfile);
-router.put("/update-profile", isAuthentic, upload.single("profileImage"), updateProfile);
+router.put("/update-profile", upload.single("profileImage"), isAuthentic, updateProfile);
 
 export default router;

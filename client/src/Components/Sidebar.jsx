@@ -50,7 +50,7 @@ function Sidebar() {
           title="Categories"
         >
           <i className="bx bx-food-menu" />
-          <span className="nav-text nav-text-custom">Products</span>
+          <span className="nav-text nav-text-custom">Subjects</span>
         </a>
       </li>
     </ul>

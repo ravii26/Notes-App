@@ -1,8 +1,8 @@
 import Product from "../models/product.js";
 const createProduct = async (req, res) => {
   try {
-    const { name, description, price } = req.body;
-    if (!name || !price || !description)
+    const { name, description, price, image } = req.body;
+    if (!name || !price || !description || !image)
       return res
         .status(400)
         .json({ message: "Please provide a name and price for the product" });
@@ -12,7 +12,7 @@ const createProduct = async (req, res) => {
         .status(400)
         .json({ message: "Please provide a user for the product" });
     }
-    const product = new Product({ name, description, price, user: user });
+    const product = new Product({ name, description, price, image, user: user });
     if (req.body.ingredients) {
       product.ingredients.push(...req.body.ingredients);
     } else {
@@ -34,7 +34,13 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     const user = req.params.user;
-    const products = await Product.find({ user: user._id });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    let products;
+    if (user.isAdmin) {
+      products = await Product.find({});
+    } else {
+      products = await Product.find({ user: user._id });
+    }
     res.status(200).json({ message: "Products found", products });
   } catch (error) {
     console.error("Error getting products:", error);
@@ -44,7 +50,6 @@ const getAllProducts = async (req, res) => {
 
 const getProduct = async (req, res) => {
   try {
-    console.log(req.params.id);
     const product = await Product.findById(req.params.id).populate("user");
     if (!product) return res.status(404).json({ message: "Product not found" });
     res.status(200).json({ product });
@@ -60,8 +65,8 @@ const updateProduct = async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    const { name, description, price } = req.body;
-    if (!name || !price || !description)
+    const { name, description, price, image } = req.body;
+    if (!name || !price || !description || !image)
       return res
         .status(400)
         .json({ message: "Please provide a name and price for the product" });
@@ -74,6 +79,7 @@ const updateProduct = async (req, res) => {
     product.name = name;
     product.description = description;
     product.price = price;
+    product.image = image;
     product.ingredients = [];
     product.variantsGroup = [];
     if (req.body.ingredients) {

@@ -1,9 +1,16 @@
-import Category from "../models/category.js";
+import Category from "../models/categories.js";
 
 const getCategories = async (req, res) => {
   try {
     const user = req.params.user;
-    const categories = await Category.find({ user: user._id });
+
+    let categories;
+
+    if (user.isAdmin) {
+      categories = await Category.find({});
+    } else {
+      categories = await Category.find({ user: user });
+    }
 
     if (!categories)
       return res.status(404).send({ message: "Categories not found" });

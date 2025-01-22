@@ -24,8 +24,16 @@ function SignUp() {
     try {
       const url = "http://localhost:5000/api/v1/register";
       const response = await axios.post(url, data);
-      console.log(response.data);
-      navigate("/notes");
+      if (response.status === 200) {
+         await axios.post(
+          "http://localhost:5000/api/v1/send-notification",
+          {
+            user: response.data.user,
+          }
+        );
+      }
+      alert("Please Login");
+      navigate("/");
     } catch (error) {
       if (error.response) {
         toast.error(error.response.data.message, {
@@ -47,8 +55,8 @@ function SignUp() {
         <div className="left-panel">
           <div className="branding">
             <img src={Logo} alt="Company Logo" className="logo" />
-            <h1 className="company-name">SilverXis</h1>
-            <p className="slogan">Enhance Your Web Services With Us</p>
+            <h1 className="company-name">Notes App</h1>
+            <p className="slogan">Organize your Thoughts with us</p>
           </div>
         </div>
         <div className="forms">

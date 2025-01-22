@@ -14,7 +14,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #71b8db;
+  /* background-color: #71b8db; */
+  background-color: #f1f1f2;
+
   background-position: center;
   background-size: cover;
 }
@@ -25,23 +27,25 @@
   max-width: 750px;
   width: 100%;
   background: white;
-  border-radius: 10px;
+  border-radius: 30px;
   overflow: hidden;
   display: flex;
   padding: 10px;
+  /* background-color: #3a5d9c; */
   background-color: #71b8db;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  margin: auto;
 }
 
 .left-panel {
   flex: 1;
-  background-color: #3a5d9c;
+  /* background-color: #3a5d9c; */
+  background-color: #71b8db;
   display: flex;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 30px;
-  border-radius: 30px 0px 0px 30px;
+  padding: 20px;
 }
 
 .branding {
@@ -69,14 +73,14 @@
 /* Right Panel */
 .forms {
   flex: 1;
-  padding: 30px;
+  padding: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   flex-direction: column;
   background-color: white;
-  border-radius: 0px 30px 30px 0px;
+  border-radius: 30px 30px 30px 30px;
 }
 
 .form-auth {
@@ -167,7 +171,8 @@
   letter-spacing: 1px;
   border-radius: 25px;
   width: 200px;
-  background-color: #3a5d9c;
+  /* background-color: #3a5d9c; */
+  background-color: #71b8db;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -237,6 +242,7 @@
   .container-auth {
     flex-direction: column;
     padding: 10px;
+    margin:40px;
   }
 
   .left-panel {
@@ -244,7 +250,7 @@
   }
 
   .forms {
-    padding: 10px;
+    padding: 20px;
   }
 
   .form-auth .title {
@@ -364,6 +370,10 @@ body {
   position: sticky;
   background-color: #8aaae5;
   padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 .navbar-custom .navbar-brand-custom {
   font-size: 30px;
@@ -576,6 +586,9 @@ h5.modal-title {
   border-radius: 5px;
   padding: 8px 12px;
 }
+.input-group {
+  width: 300px;
+}
 
 .sidebar {
   position: sticky;
@@ -603,15 +616,14 @@ h5.modal-title {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: larger;
-  margin-bottom: 5px;
-  /* color: #fff; */
+  /* margin-bottom: 5px; */
   color: black;
 }
 
 .nav-link-custom {
   display: flex;
   align-items: center; /* Vertically center the content */
-  padding: 15px 20px;
+  padding: 15px;
   color: #fff;
   text-decoration: none;
   border-radius: 7px;
@@ -632,6 +644,7 @@ h5.modal-title {
 .main-content {
   margin-left: 250px;
   padding: 20px;
+  width: auto;
 }
 
 .nav-link-custom i {
@@ -653,7 +666,8 @@ h5.modal-title {
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 90px;
+    width: 80px;
+    padding-left: 7px;
   }
   .main-content {
     margin-left: 90px;
@@ -666,8 +680,10 @@ h5.modal-title {
   }
 
   .nav-link-custom i {
-    margin-right: 0;
     font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center icon horizontally */
   }
 }
 .tooltip {
@@ -836,6 +852,7 @@ h3 {
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-family: "Roboto", sans-serif;
+  width: 100%;
 }
 
 .category-table-c thead th {
@@ -933,5 +950,55 @@ h3 {
 @media screen and (max-width: 768px) {
   .body-add-product {
     margin-left: 100px;
+  }
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.close-modal:hover {
+  color: rgb(224,  55,  55);
+}
+
+.login-with-google-btn {
+  transition: background-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  margin-top: 20px;
+
+  padding: 12px 16px 12px 42px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
+
+  color: #757575;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+
+  /* background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+  
+  background-repeat: no-repeat;
+  /* background-position: 85px 14px; */
+  background-color: white;
+  
+  &:hover {
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  &:active {
+    background-color: #eeeeee;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25),
+      0 0 0 3px #c8dafc;
   }
 }

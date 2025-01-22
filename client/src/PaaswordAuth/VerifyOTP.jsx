@@ -45,10 +45,8 @@ const VerifyOTPPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const otpValue = otp.join("");
-    console.log("email:", email);
-    console.log("Entered OTP:", otpValue);
     try {
-      const response = await axios.post(`http://localhost:5000/api/verifyotp`, {
+      const response = await axios.post(`http://localhost:5000/api/v1/verify-otp`, {
         email,
         otp: otpValue,
       });

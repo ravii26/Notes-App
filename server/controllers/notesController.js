@@ -1,4 +1,4 @@
-import Note from "../models/Note.js";
+import Note from "../models/notes.js";
 import { validateNote } from "../utils/validations.js";
 
 const getNotes = async (req, res) => {
@@ -66,7 +66,7 @@ const createNote = async (req, res) => {
 
 const deleteNote = async (req, res) => {
   try {
-    const { noteId } = req.body;
+    const {  noteId } = req.params;
 
     const note = await Note.findOneAndDelete({ _id: noteId });
     if (!note) return res.status(404).send({ message: "Note not found" });
@@ -120,11 +120,24 @@ const searchNotes = async (req, res) => {
     const user = req.body.user;
 
     const searchText = req.body.searchText;
-    const notes = await Note.find({
-      user: user._id,
-      title: { $regex: searchText, $options: "i" },
-    });
-
+    let notes;
+    if (user.isAdmin) {
+      notes = await Note.find({
+        $or: [
+          { title: { $regex: searchText, $options: "i" } },
+          { description: { $regex: searchText, $options: "i" } }
+        ]
+      })
+    } else {
+      notes = await Note.find({
+        user: user._id,
+        $or: [
+          { title: { $regex: searchText, $options: "i" } },
+          { description: { $regex: searchText, $options: "i" } }
+        ]
+      });
+    }
+    
     if (!notes) return res.status(404).send({ message: "Notes not found" });
 
     res.status(200).send({ notes });

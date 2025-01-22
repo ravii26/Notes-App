@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import Header from "Components/Header";
-import Sidebar from "Components/Sidebar";
-
 
 function Note() {
   const [note, setNote] = useState({ title: "", description: "" });
@@ -25,12 +22,17 @@ function Note() {
 
     const fetchNote = async () => {
       try {
-        const response = await axios.post("http://localhost:5000/api/note", {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await axios.post(
+          "http://localhost:5000/api/v1/get-note",
+          {
+            noteId,
           },
-          noteId,
-        });
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (response.status === 201) {
           setNote(response.data.note);
         }
@@ -81,12 +83,12 @@ function Note() {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/noteupdate/${noteId}`,
+        `http://localhost:5000/api/v1/update-note/${noteId}`,
         {
           title: note.title,
           description: note.description,
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status === 200) {
         console.log("Note autosaved", response.data); // Debug log
@@ -120,36 +122,35 @@ function Note() {
     selection.removeAllRanges();
     selection.addRange(range);
   };
-  
 
   return (
-      <div>
-      <Header />
-      <Sidebar/>
+    <div>
       <div className="main-content">
-      <h5
-        className="heading-note"
-        contentEditable="true"
-        suppressContentEditableWarning={true}
-        ref={titleRef}
-              onInput={(e) => handleChange("title", e.currentTarget.textContent, titleRef)}
-              onBlur={saveNote} 
-      >
-        {note?.title}
-      </h5>
+        <h5
+          className="heading-note"
+          contentEditable="true"
+          suppressContentEditableWarning={true}
+          ref={titleRef}
+          onInput={(e) =>
+            handleChange("title", e.currentTarget.textContent, titleRef)
+          }
+          onBlur={saveNote}
+        >
+          {note?.title}
+        </h5>
 
-      <p
-        className="description-note"
-        contentEditable="true"
-        suppressContentEditableWarning={true}
-        ref={descriptionRef}
-        onInput={(e) =>
-          handleChange("description", e.target.innerText, descriptionRef)
-        }
-        onBlur={saveNote} 
-      >
-        {note?.description}
-      </p>
+        <p
+          className="description-note"
+          contentEditable="true"
+          suppressContentEditableWarning={true}
+          ref={descriptionRef}
+          onInput={(e) =>
+            handleChange("description", e.target.innerText, descriptionRef)
+          }
+          onBlur={saveNote}
+        >
+          {note?.description}
+        </p>
       </div>
     </div>
   );

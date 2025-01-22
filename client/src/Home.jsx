@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AddNoteModal from "Modals/AddNoteModal";
-import Header from "Components/Header";
-import Sidebar from "Components/Sidebar";
+import DeleteModal from "Modals/DeleteModal";
+import Pagination from "Helper/Pagination";
+import { onMessageListener } from "utils/firebaseUtils";
+import { ToastContainer, toast } from "react-toastify";
 
 function Home() {
   const navigate = useNavigate();
@@ -26,8 +28,6 @@ function Home() {
   const [notesPerPage, setNotesPerPage] = useState(6); // Adjust based on your design
   const notesPerPageOptions = [4, 6, 8, 10];
 
- 
-
   const handleNoteClick = (title, discription, noteId) => {
     navigate(`/notes/${noteId}`);
   };
@@ -42,15 +42,16 @@ function Home() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/createnote",
+        "http://localhost:5000/api/v1/create-note",
         {
           ...newNote,
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log("Hello");
       if (response.status === 201) {
         setNotes([...notes, response.data.note]);
         setNewNote({ title: "", description: "" });
@@ -89,10 +90,9 @@ function Home() {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/deletenote",
+      const response = await axios.delete(
+        `http://localhost:5000/api/v1/delete-note/${selectedNoteId}`,
         {
-          noteId: selectedNoteId,
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -111,6 +111,26 @@ function Home() {
     }
   };
 
+  // const fetchFCMToken = async () => {
+  //   const fcmtoken = await requestFCMToken();
+  // };
+
+  onMessageListener()
+    .then((payload) => {
+      console.log("Started");
+      if (payload) {
+        console.log(payload);
+        toast(
+          <div>
+            <p>{payload.notification.title}</p>
+            <p>{payload.notification.body}</p>
+          </div>,
+          { position: "top-right", autoClose: 3000 }
+        );
+      }
+    })
+    .catch((err) => console.log("failed", err));
+
   useEffect(() => {
     const fetchNotes = async () => {
       const token = localStorage.getItem("token");
@@ -120,13 +140,14 @@ function Home() {
         return;
       }
       try {
-        console.log(currentPage)
-        const response = await axios.get(`http://localhost:5000/api/notes?page=${currentPage}&limit=${notesPerPage}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log(response.data);
+        const response = await axios.get(
+          `http://localhost:5000/api/v1/get-notes?page=${currentPage}&limit=${notesPerPage}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setNotes(response.data.notes || []);
         setTotalPages(response.data.totalPages || 1);
         setNotesSave(response.data.notes || []);
@@ -141,9 +162,8 @@ function Home() {
     const fetchCategories = async () => {
       try {
         const token = localStorage.getItem("token");
-        console.log(token);
         const response = await axios.get(
-          "http://localhost:5000/api/categories",
+          "http://localhost:5000/api/v1/get-categories",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -157,17 +177,40 @@ function Home() {
     };
     fetchNotes();
     fetchCategories();
+    // fetchFCMToken();
   }, [navigate, variable, currentPage, notesPerPage]);
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
+    if (e.target.value === "") {
+      setVariable(!variable);
+    }
+    // else {
+    //   let searchText = e.target.value;
+    //   try {
+    //     const token = localStorage.getItem("token");
+    //     const response = await axios.post(
+    //       "http://localhost:5000/api/v1/search-notes",
+    //       {
+    //         searchText,
+    //       },
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${token}`,
+    //         },
+    //       }
+    //     );
+    //     if (response.status === 200) {
+    //       setNotes(response.data.notes);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching notes:", error);
+    //   }
+    // }
     setNotes(
       notesSave.filter((note) =>
         note.title.toLowerCase().includes(e.target.value.toLowerCase())
       )
     );
-    if (e.target.value === "") {
-      setVariable(!variable);
-    }
   };
 
   const handlePageChange = (page) => {
@@ -177,11 +220,8 @@ function Home() {
   return (
     <div className="body-home">
       <div>
-        {/* Navbar */}
-        <Header />
-        <Sidebar />
+        <ToastContainer />
 
-        {/* Notes Grid */}
         <div className="main-content">
           <div className=" ">
             <div className="d-flex justify-content-center">
@@ -202,7 +242,6 @@ function Home() {
           </div>
 
           <div className="container mt-4">
-            
             <div className="row g-4">
               {notes.length === 0 && (
                 <h1
@@ -226,7 +265,10 @@ function Home() {
                     }
                   >
                     <h5 className="card-title">
-                      {note.title} {note.category && <span>-: " {note.category?.name} "</span> }
+                      {note.title}{" "}
+                      {note.category && (
+                        <span>-: " {note.category?.name} "</span>
+                      )}
                     </h5>
                     <p className="text-muted small">
                       {formatDate(note.createdAt)}
@@ -257,83 +299,18 @@ function Home() {
         </div>
       </div>
 
-      <div className="body-pagination"><div className="container ">
-        <div className="row" >
-          <div className="col-md-12 text-center">
-            <div className="pagination-container">
-              <div className="results-dropdown mt-3">
-                <span className="results-text"></span>
-                <div className="dropdown"  >
-                  <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    {notesPerPage} 
-                  </button>
-                  <ul className="dropdown-menu" > 
-                    {notesPerPageOptions.map((page) => (
-                      <li key={page} className="dropdown-item" ><button  style={{  width: "100%", textAlign: "center", padding: "5px", border: "2px solid #ccc ", borderRadius: "5px", backgroundColor: "transparent", color: "inherit", fontSize: "14px", fontWeight: "bold", cursor: "pointer"}} onClick={() =>{setCurrentPage(1); setNotesPerPage(page)}}>
-                      {page}</button></li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <nav aria-label="Page navigation">
-                <ul className="pagination pagination-custom justify-content-center">
-                  <li className="page-item page-item-custom">
-                    <button className="page-link page-link-custom" onClick={() => { if (currentPage > 1) setCurrentPage(currentPage - 1);}}>
-                      <span>«</span>
-                    </button>
-                  </li>
+      <Pagination
+        totalPages={totalPages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        notesPerPage={notesPerPage}
+        setNotesPerPage={setNotesPerPage}
+        notesPerPageOptions={notesPerPageOptions}
+        handlePageChange={handlePageChange}
+      />
 
-                  {Array.from({ length: totalPages }, (_, index) => (
-                    <li key={index} className={`page-item page-item-custom ${index + 1 === currentPage ? 'active' : ''}`}>
-                      <button className="page-link page-link-custom" onClick={() => handlePageChange(index + 1)} >{index+1 } </button></li>
-                  ))}                 <li className="page-item page-item-custom">
-                    <button className="page-link page-link-custom" onClick={() => { if (currentPage < totalPages) setCurrentPage(currentPage + 1);}}>
-                      <span>»</span>
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div></div>
+      <DeleteModal handleDelete={handleDelete} />
 
-      {/* Delete Modal */}
-      <div
-        className="modal fade"
-        id="deleteModal"
-        tabIndex="-1"
-        aria-labelledby="deleteModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content modal-content-custom">
-            <div className="modal-header modal-header-custom">
-              <h5 className="modal-title text-center">Delete Note</h5>
-            </div>
-            <div className="modal-body modal-body-custom">
-              Are you sure you want to delete this note?
-            </div>
-            <div className="modal-footer modal-footer-custom">
-              <button
-                type="button"
-                className="btn-m btn-cancel-m"
-                data-bs-dismiss="modal"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn-m btn-delete-m"
-                data-bs-dismiss="modal"
-                onClick={handleDelete}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
       <AddNoteModal
         show={showAddNoteModal}
         setShow={setShowAddNoteModal}
