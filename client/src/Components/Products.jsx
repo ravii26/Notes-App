@@ -46,7 +46,7 @@ function Products() {
   };
   return (
     <div>
-    <div className="container main-content " style={{ marginLeft: "230px" }}>
+    <div className="container main-content">
       {/* <div className="container ">
         <div className="d-flex justify-content-center">
           <div className="input-group" style={{ maxWidth: 300 }}>
@@ -74,10 +74,12 @@ function Products() {
           No Products available
         </h1>
       )}
-      {products.length > 0 && (
+        {products.length > 0 && (
+           <div className="table-responsive-wrapper"
+           style={{ overflowX: "auto", marginTop: "20px" }}>
         <table
           className="category-table-c table-responsive table table-bordered"
-          style={{ marginTop: "20px", width: "800px" }}
+          style={{ marginTop: "20px" }}
         >
           <thead>
             <tr>
@@ -110,6 +112,7 @@ function Products() {
             ))}
           </tbody>
         </table>
+            </div>
       )}
       </div>
       <a href="/add-product"

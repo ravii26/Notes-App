@@ -46,15 +46,15 @@ function Devices() {
 
   return (
     <div>
-      <div className="container main-content " style={{ marginLeft: "230px" }}>
+      <div className="container main-content">
         <div className="container ">
-          <div className="d-flex justify-content-center">
+          {/* <div className="d-flex justify-content-center">
             <div className="input-group" style={{ maxWidth: 300 }}>
-              {/* <span className="input-group-text" id="basic-addon1">
+              <span className="input-group-text" id="basic-addon1">
                   <i className="bx bx-search" />
-                </span> */}
+                </span>
             </div>
-          </div>
+          </div> */}
         </div>
         {devices.length === 0 && (
           <h1
@@ -70,9 +70,11 @@ function Devices() {
           </h1>
         )}
         {devices.length > 0 && (
-          <table
+          <div className="table-responsive-wrapper"
+          style={{ overflowX: "auto", marginTop: "20px" }}>
+            <table
             className="category-table-c table table-bordered"
-            style={{ marginTop: "20px", width: "800px" }}
+            style={{ marginTop: "20px" }}
           >
             <thead>
               <tr>
@@ -102,6 +104,7 @@ function Devices() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Image from "../assets/profile.png";
+
 function Header() {
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -23,7 +25,7 @@ function Header() {
     }
   };
 
-  const [imagePreview, setImagePreview] = useState("images/user.png");
+  const [imagePreview, setImagePreview] = useState(Image);
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
@@ -48,10 +50,6 @@ function Header() {
   return (
     <nav
       className="navbar navbar-custom navbar-expand-lg text-white shadow-md px-3"
-      style={{
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        zIndex: 1000,
-      }}
     >
       <div className="container-fluid">
         <a href="/notes" style={{ textDecoration: "none" }}>
@@ -61,13 +59,13 @@ function Header() {
         </a>
         <div className="d-flex align-items-center">
           <div className="user-icon">
-            <a href="/profile" style={{ textDecoration: "none" }}>
+            <a href="/profile" className="text-decoration-none" style={{ textDecoration: "none" }}>
               {/* <img src="images/navuser.jfif" alt="User" className="user-img" /> */}
               {imagePreview && (
                 <img
-                  src={imagePreview || "images/user.png"}
+                  src={imagePreview || Image}
                   alt="Profile"
-                  className="user-img"
+                  className="rounded-circle user-img"
                 />
               )}
             </a>

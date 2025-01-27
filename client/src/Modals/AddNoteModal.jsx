@@ -77,17 +77,9 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
                 <label htmlFor="noteCategory" className="form-label">
                   Category <span style={{ color: "red" }}>*</span>
                 </label>
-                <select
-                  id="noteCategory"
-                  className="form-control"
-                  value={newNote.category}
-                  onChange={(e) =>
-                    setNewNote({ ...newNote, category: e.target.value })
-                  }
-                >
-                  <option disabled hidden value="">
-                    Select Category
-                  </option>
+                <select name="" id="" className="form-control" value={newNote.category} onChange={(e) => setNewNote({ ...newNote, category : e.target.value })}>
+                  <option disabled hidden value="" defaultValue="No">Select Category</option>
+        
                   {categories.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.name}

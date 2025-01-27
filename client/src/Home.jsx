@@ -6,14 +6,16 @@ import DeleteModal from "Modals/DeleteModal";
 import Pagination from "Helper/Pagination";
 import { onMessageListener } from "utils/firebaseUtils";
 import { ToastContainer, toast } from "react-toastify";
+import { formatDate } from "utils/CommonHelper";
+import { addNote } from "services/apiServices";
 
 function Home() {
   const navigate = useNavigate();
   const [notes, setNotes] = useState([]);
   const [notesSave, setNotesSave] = useState([]);
-  const [selectedNoteId, setSelectedNoteId] = useState(null); // Store the selected note ID for deletion
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
 
-  const [showAddNoteModal, setShowAddNoteModal] = useState(false); // Control Add Note Modal visibility
+  const [showAddNoteModal, setShowAddNoteModal] = useState(false);
   const [newNote, setNewNote] = useState({
     title: "",
     description: "",
@@ -25,10 +27,10 @@ function Home() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [notesPerPage, setNotesPerPage] = useState(6); // Adjust based on your design
+  const [notesPerPage, setNotesPerPage] = useState(6);
   const notesPerPageOptions = [4, 6, 8, 10];
 
-  const handleNoteClick = (title, discription, noteId) => {
+  const handleNoteClick = (noteId) => {
     navigate(`/notes/${noteId}`);
   };
 
@@ -41,43 +43,15 @@ function Home() {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/v1/create-note",
-        {
-          ...newNote,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status === 201) {
-        setNotes([...notes, response.data.note]);
-        setNewNote({ title: "", description: "" });
+      const note = await addNote(newNote);
+      if (note) {
+        setNotes([...notes, note]);
+        setNewNote({ title: "", description: "", category: "" });
         setShowAddNoteModal(false);
       }
     } catch (error) {
       console.log("Error adding note:", error);
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const month = date.toLocaleString("en-US", { month: "short" });
-    const year = date.getFullYear();
-
-    const suffix =
-      day % 10 === 1 && day !== 11
-        ? "st"
-        : day % 10 === 2 && day !== 12
-        ? "nd"
-        : day % 10 === 3 && day !== 13
-        ? "rd"
-        : "th";
-
-    return `${day}${suffix} ${month} ${year}`;
   };
 
   const handleDelete = async () => {
@@ -103,7 +77,6 @@ function Home() {
           prevNotes.filter((note) => note._id !== selectedNoteId)
         );
         setVariable(!variable);
-        console.log("Note deleted successfully");
       }
       setSelectedNoteId(null);
     } catch (error) {
@@ -153,6 +126,7 @@ function Home() {
         setNotesSave(response.data.notes || []);
       } catch (error) {
         console.error("Error fetching notes:", error);
+        localStorage.removeItem("token");
         if (error.response?.status === 401) {
           alert("Invalid or expired token. Please login again.");
           navigate("/");
@@ -261,7 +235,7 @@ function Home() {
                   <div
                     className="card note-card shadow-sm p-3 border-0"
                     onClick={() =>
-                      handleNoteClick(note.title, note.description, note._id)
+                      handleNoteClick(note._id)
                     }
                   >
                     <h5 className="card-title">

@@ -50,12 +50,14 @@ const createNote = async (req, res) => {
       console.log(error);
       return res.status(400).send({ message: error.details[0].message });
     }
-    const note = await Note.create({
+    let note = await Note.create({
       title,
       description,
       user: user._id,
       category,
-    });
+    })
+
+    note = await Note.findOne({ _id: note._id }).populate("category");
 
     res.status(201).send({ message: "Note created successfully", note });
   } catch (error) {

@@ -142,40 +142,44 @@ function Categories() {
             No Categories available
           </h1>
         )}
-        {categories.length > 0 && (
-          <table
-            className="category-table-c table-responsive table-responsive-sm table table-bordered"
-            style={{ marginTop: "20px" }}
-          >
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {categories.map((category, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{category.name}</td>
-                  <td>{category.description}</td>
-                  <td>
+      {categories.length > 0 && (
+  <div
+    className="table-responsive-wrapper"
+    style={{ overflowX: "auto", marginTop: "20px" }}
+  >
+    <table
+      className="category-table-c table table-bordered"
+      style={{ minWidth: "600px" }} // Ensure table has a minimum width
+    >
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {categories.map((category, index) => (
+          <tr key={index}>
+            <td>{index + 1}</td>
+            <td>{category.name}</td>
+            <td>{category.description}</td>
+            <td>
+              <button
+                className="btn btn-danger btn-danger-c btn-sm m-2"
+                onClick={() => handleDelete(category._id)}
+              >
+                <i className="bx bx-trash" />
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
 
-                   
-                    <button
-                      className="btn btn-danger btn-danger-c btn-sm m-2"
-                      onClick={() => handleDelete(category._id)}
-                    >
-                      <i className="bx bx-trash" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
         <button
           className="btn add-note-btn"
           style={{ backgroundColor: "#f7de52" }}
