@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categories }) {
-  
+  const [error, setError] = useState("");
+
+  const handleSave = () => {
+    if (!newNote.category) {
+      setError("Category is required.");
+    } else {
+      setError("");
+      handleAddNote();
+    }
+  };
+
+  const closeModal = () => {
+    setNewNote({title:"", description:"", category:""})
+    setShow(false)
+    setError("")
+  }
+
   return (
     <div
       className={`modal fade ${show ? "show" : ""}`}
@@ -22,7 +38,7 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              onClick={() => setShow(false)} // Close the modal
+              onClick={closeModal} // Close the modal
             ></button>
           </div>
           <div className="modal-body modal-body-custom">
@@ -58,18 +74,29 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
                 ></textarea>
               </div>
               <div className="mb-3 text-start">
-                <label htmlFor="noteTitle" className="form-label">
-                  Category
+                <label htmlFor="noteCategory" className="form-label">
+                  Category <span style={{ color: "red" }}>*</span>
                 </label>
-                <select name="" id="" className="form-control" value={newNote.category} onChange={(e) => setNewNote({ ...newNote, category : e.target.value })}>
-                  <option disabled hidden value="" defaultValue="No">Select Category</option>
-        
+                <select
+                  id="noteCategory"
+                  className="form-control"
+                  value={newNote.category}
+                  onChange={(e) =>
+                    setNewNote({ ...newNote, category: e.target.value })
+                  }
+                >
+                  <option disabled hidden value="">
+                    Select Category
+                  </option>
                   {categories.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.name}
                     </option>
                   ))}
                 </select>
+                {error && (
+                  <div style={{ color: "red", marginTop: "5px" }}>{error}</div>
+                )}
               </div>
             </form>
           </div>
@@ -78,14 +105,14 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               type="button"
               className="btn btn-secondary"
               data-bs-dismiss="modal"
-              onClick={() => setShow(false)} // Close the modal
+              onClick={closeModal} // Close the modal
             >
               Cancel
             </button>
             <button
               type="button"
               className="btn btn-primary"
-              onClick={handleAddNote} // Call the add note function
+              onClick={handleSave} // Call the save function with validation
             >
               Save Note
             </button>
