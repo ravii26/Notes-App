@@ -21,20 +21,26 @@ function App() {
   const user = localStorage.getItem("token");
 
   const GoogleAuthWrapper = () => {
-    return <GoogleOAuthProvider clientId="719109913508-1v8hi0lb3hrtvgsqcsb5g1pasc84vouc.apps.googleusercontent.com">
-<LoginPage />
-    </GoogleOAuthProvider>
-  }
+    return (
+      <GoogleOAuthProvider clientId="719109913508-1v8hi0lb3hrtvgsqcsb5g1pasc84vouc.apps.googleusercontent.com">
+        <LoginPage />
+      </GoogleOAuthProvider>
+    );
+  };
   return (
     <>
       <Routes>
-        {user && <Route element={<MainLayout />}><Route path="/notes" element={<HomePage />} /></Route>}
-        <Route path="/" element={<GoogleAuthWrapper/>} />
+        {user && (
+          <Route element={<MainLayout />}>
+            <Route path="/notes" element={<HomePage />} />
+          </Route>
+        )}
+        <Route path="/" element={<GoogleAuthWrapper />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/verify-otp" element={<VerifyOTPPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route element={<MainLayout />}>
+        <Route path="/" element={<MainLayout />}>
           <Route path="/notes" element={<HomePage />} />
           <Route path="/notes/:noteId" element={<NotePage />} />
           <Route path="/categories" element={<CategoriesPage />} />
@@ -43,7 +49,7 @@ function App() {
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/add-product" element={<AddProductPage />} />
         </Route>
-        <Route path="*" element={<h1>Not Found</h1>} />
+        <Route path="*" element={<h1 className="font-bold text-center" style={{ marginTop: "10px", color: "red"  }}>Page Not Found <a href="/" style={{fontSize:"30px"}}>Click for login page</a></h1>} />
       </Routes>
     </>
   );

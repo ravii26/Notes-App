@@ -1,16 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import io from "socket.io-client";
 
 function Note() {
   const [note, setNote] = useState({ title: "", description: "" });
-  const [timer, setTimer] = useState(null); // Timer for delay before autosave
+  const [timer, setTimer] = useState(null);
   const { noteId } = useParams();
   const navigate = useNavigate();
 
-  // Refs for title and description contentEditable elements
+  const [change, setChange] = useState(false);
+
   const titleRef = useRef(null);
   const descriptionRef = useRef(null);
+
+  const socket = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -24,9 +28,7 @@ function Note() {
       try {
         const response = await axios.post(
           "http://localhost:5000/api/v1/get-note",
-          {
-            noteId,
-          },
+          { noteId },
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -44,21 +46,45 @@ function Note() {
     fetchNote();
   }, [navigate, noteId]);
 
-  // Function to handle content changes and set autosave timer
+  useEffect(() => {
+    socket.current = io("http://localhost:5000");
+
+    socket.current.emit("userInfo", {
+      userId:  localStorage.getItem("token"),
+    });
+
+    socket.current.on("connect", () => {
+      console.log("Connected to the server");
+    });
+
+    socket.current.on("receiveMessage", (data) => {
+      if (data.noteId !== noteId) return;
+      setNote(data.message);
+    });
+
+    socket.current.emit("sendMessageToList", {
+      userId: localStorage.getItem("token"),message: note, noteId: noteId
+    });
+
+    socket.current.on("onConnect", (data) => {
+      console.log("Socket id:", data.id);
+    });
+  }, [change]);
+
   const handleChange = (field, value, ref) => {
-    const cursorPosition = getCaretPosition(ref.current); // Save current cursor position
+    const cursorPosition = getCaretPosition(ref.current);
 
     setNote((prevNote) => ({
       ...prevNote,
       [field]: value,
     }));
 
-    // Clear the previous timer
+    setChange(!change);
+
     if (timer) {
       clearTimeout(timer);
     }
 
-    // Set a new timer to autosave after 2 seconds
     const newTimer = setTimeout(() => {
       console.log("Autosaving note...");
       saveNote();
@@ -66,13 +92,11 @@ function Note() {
 
     setTimer(newTimer);
 
-    // Restore the cursor position after state update
     setTimeout(() => {
-      setCaretPosition(ref.current, cursorPosition); // Restore cursor position
+      setCaretPosition(ref.current, cursorPosition);
     }, 0);
   };
 
-  // Function to save the note to the backend
   const saveNote = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -91,16 +115,17 @@ function Note() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (response.status === 200) {
-        console.log("Note autosaved", response.data); // Debug log
+        console.log("Note autosaved", response.data);
+
+        socket.current.emit("noteUpdated", response.data.note);
       } else {
-        console.log("Failed to save note:", response.status); // Debug log
+        console.log("Failed to save note:", response.status);
       }
     } catch (error) {
-      console.log("Error saving note:", error); // Debug log
+      console.log("Error saving note:", error);
     }
   };
 
-  // Function to get the caret position inside a contentEditable element
   const getCaretPosition = (el) => {
     let caretPos = 0;
     const selection = window.getSelection();
@@ -112,11 +137,10 @@ function Note() {
     return caretPos;
   };
 
-  // Function to set the caret position inside a contentEditable element
   const setCaretPosition = (el, pos) => {
     const range = document.createRange();
     const selection = window.getSelection();
-    if (!el.firstChild) el.textContent = ""; // Ensure text node exists
+    if (!el.firstChild) el.textContent = "";
     range.setStart(el.firstChild, pos);
     range.setEnd(el.firstChild, pos);
     selection.removeAllRanges();

@@ -8,7 +8,7 @@ const MainLayout = () => {
     <>
       <Header />
       <Sidebar />
-      <Outlet /> {/* Renders the nested route components */}
+      <Outlet /> 
     </>
   );
 };

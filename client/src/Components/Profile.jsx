@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Image from "../assets/profile.png";
 
 function Profile() {
   const [error, setError] = useState("");
@@ -10,7 +11,7 @@ function Profile() {
     profileImage: "",
   });
 
-  const [imagePreview, setImagePreview] = useState("images/user.png");
+  const [imagePreview, setImagePreview] = useState(Image);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -77,7 +78,7 @@ function Profile() {
             <div className="profile-pic mb-4">
               {imagePreview && (
                 <img
-                  src={imagePreview || "images/user.png"}
+                  src={imagePreview || Image}
                   alt="Profile"
                   className="rounded-circle"
                   width={150}

@@ -24,7 +24,7 @@ function Pagination(props) {
                     type="button"
                     data-bs-toggle="dropdown"
                   >
-                    {notesPerPage}
+                    {notesPerPage}/page
                   </button>
                   <ul className="dropdown-menu">
                     {notesPerPageOptions.map((page) => (
@@ -47,7 +47,7 @@ function Pagination(props) {
                             setNotesPerPage(page);
                           }}
                         >
-                          {page}
+                          {page}/page
                         </button>
                       </li>
                     ))}
