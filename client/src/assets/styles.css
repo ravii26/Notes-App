@@ -710,8 +710,6 @@ h5.modal-title {
   border-radius: 50%;
   overflow: hidden;
   display: flex;
-  justify-content: center;
-  align-items: center;
   border: none;
   margin-right: 10px;
   border: 2px solid #a0bbba;
@@ -733,6 +731,7 @@ h5.modal-title {
 }
 
 .profile-pic img {
+  object-fit:cover;
   border: 5px solid #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }

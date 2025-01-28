@@ -65,7 +65,7 @@ function Header() {
                 <img
                   src={imagePreview || Image}
                   alt="Profile"
-                  className="rounded-circle user-img"
+                  className="user-img"
                 />
               )}
             </a>
