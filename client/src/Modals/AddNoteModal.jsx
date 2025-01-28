@@ -1,22 +1,27 @@
 import React, { useState } from "react";
 
 function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categories }) {
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({ title: "", description: "", category: "" });
 
   const handleSave = () => {
-    if (!newNote.category) {
-      setError("Category is required.");
-    } else {
-      setError("");
+    const newErrors = {};
+    if (!newNote.title.trim()) newErrors.title = "Title is required.";
+    if (!newNote.description.trim()) newErrors.description = "Description is required.";
+    if (!newNote.category) newErrors.category = "Category is required.";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
       handleAddNote();
+      closeModal();
     }
   };
 
   const closeModal = () => {
-    setNewNote({title:"", description:"", category:""})
-    setShow(false)
-    setError("")
-  }
+    setNewNote({ title: "", description: "", category: "" });
+    setShow(false);
+    setErrors({ title: "", description: "", category: "" });
+  };
 
   return (
     <div
@@ -38,14 +43,15 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              onClick={closeModal} // Close the modal
+              onClick={closeModal} 
             ></button>
           </div>
           <div className="modal-body modal-body-custom">
             <form>
+              {/* Title Field */}
               <div className="mb-3 text-start">
                 <label htmlFor="noteTitle" className="form-label">
-                  Title
+                  Title <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
@@ -57,10 +63,15 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
                   }
                   placeholder="Enter note title"
                 />
+                {errors.title && (
+                  <div style={{ color: "red", marginTop: "5px" }}>{errors.title}</div>
+                )}
               </div>
+
+              {/* Description Field */}
               <div className="mb-3 text-start">
                 <label htmlFor="noteDescription" className="form-label">
-                  Description
+                  Description <span style={{ color: "red" }}>*</span>
                 </label>
                 <textarea
                   className="form-control"
@@ -72,22 +83,35 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
                   }
                   placeholder="Enter note description"
                 ></textarea>
+                {errors.description && (
+                  <div style={{ color: "red", marginTop: "5px" }}>{errors.description}</div>
+                )}
               </div>
+
+              {/* Category Field */}
               <div className="mb-3 text-start">
                 <label htmlFor="noteCategory" className="form-label">
                   Category <span style={{ color: "red" }}>*</span>
                 </label>
-                <select name="" id="" className="form-control" value={newNote.category} onChange={(e) => setNewNote({ ...newNote, category : e.target.value })}>
-                  <option disabled hidden value="" defaultValue="No">Select Category</option>
-        
+                <select
+                  id="noteCategory"
+                  className="form-control"
+                  value={newNote.category}
+                  onChange={(e) =>
+                    setNewNote({ ...newNote, category: e.target.value })
+                  }
+                >
+                  <option disabled hidden value="">
+                    Select Category
+                  </option>
                   {categories.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.name}
                     </option>
                   ))}
                 </select>
-                {error && (
-                  <div style={{ color: "red", marginTop: "5px" }}>{error}</div>
+                {errors.category && (
+                  <div style={{ color: "red", marginTop: "5px" }}>{errors.category}</div>
                 )}
               </div>
             </form>
@@ -97,14 +121,14 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               type="button"
               className="btn btn-secondary"
               data-bs-dismiss="modal"
-              onClick={closeModal} // Close the modal
+              onClick={closeModal} 
             >
               Cancel
             </button>
             <button
               type="button"
               className="btn btn-primary"
-              onClick={handleSave} // Call the save function with validation
+              onClick={handleSave} 
             >
               Save Note
             </button>

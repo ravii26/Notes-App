@@ -1,20 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 
 function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCategory, handleAddCategory }) {
-  
+  const [errors, setErrors] = useState({ name: "", description: "" });
+
+  const handleSave = () => {
+    const newErrors = {};
+    if (!newCategory.name.trim()) newErrors.name = "Name is required.";
+    if (!newCategory.description.trim()) newErrors.description = "Description is required.";
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      handleAddCategory(); // Save the category if no errors
+      closeModal();
+    }
+  };
+
+  const closeModal = () => {
+    setNewCategory({ name: "", description: "" });
+    setShowCategory(false);
+    setErrors({ name: "", description: "" });
+  };
+
   return (
     <div
       className={`modal fade ${showCategory ? "show" : ""}`}
-      id="addNoteModal"
+      id="addCategoryModal"
       tabIndex="-1"
-      aria-labelledby="addNoteModalLabel"
+      aria-labelledby="addCategoryModalLabel"
       aria-hidden={!showCategory}
       style={{ display: showCategory ? "block" : "none" }}
     >
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content modal-content-custom">
           <div className="modal-header modal-header-custom">
-            <h5 className="modal-title modal-add " id="addNoteModalLabel">
+            <h5 className="modal-title modal-add " id="addCategoryModalLabel">
               Add Category
             </h5>
             <button
@@ -22,33 +42,39 @@ function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCa
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              onClick={() => setShowCategory(false)} // Close the modal
+              onClick={closeModal} // Close the modal
             ></button>
           </div>
           <div className="modal-body modal-body-custom">
             <form>
+              {/* Name Field */}
               <div className="mb-3 text-start">
-                <label htmlFor="noteTitle" className="form-label">
-                  Name
+                <label htmlFor="categoryName" className="form-label">
+                  Name <span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="noteTitle"
+                  id="categoryName"
                   value={newCategory.name}
                   onChange={(e) =>
                     setNewCategory({ ...newCategory, name: e.target.value })
                   }
                   placeholder="Enter category name"
                 />
+                {errors.name && (
+                  <div style={{ color: "red", marginTop: "5px" }}>{errors.name}</div>
+                )}
               </div>
+
+              {/* Description Field */}
               <div className="mb-3 text-start">
-                <label htmlFor="noteDescription" className="form-label">
-                  Description
+                <label htmlFor="categoryDescription" className="form-label">
+                  Description <span style={{ color: "red" }}>*</span>
                 </label>
                 <textarea
                   className="form-control"
-                  id="noteDescription"
+                  id="categoryDescription"
                   rows="3"
                   value={newCategory.description}
                   onChange={(e) =>
@@ -56,6 +82,11 @@ function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCa
                   }
                   placeholder="Enter category description"
                 ></textarea>
+                {errors.description && (
+                  <div style={{ color: "red", marginTop: "5px" }}>
+                    {errors.description}
+                  </div>
+                )}
               </div>
             </form>
           </div>
@@ -64,14 +95,14 @@ function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCa
               type="button"
               className="btn btn-secondary"
               data-bs-dismiss="modal"
-              onClick={() => setShowCategory(false)} // Close the modal
+              onClick={closeModal} // Close the modal
             >
               Cancel
             </button>
             <button
               type="button"
               className="btn btn-primary"
-              onClick={handleAddCategory} // Call the add note function
+              onClick={handleSave} // Call the save function with validation
             >
               Save
             </button>
