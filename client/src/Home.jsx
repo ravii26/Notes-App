@@ -239,15 +239,17 @@ function Home() {
                     }
                   >
                     <h5 className="card-title">
-                      {note.title}{" "}
+                    {note.title}{" "}
+                      <p className="category">
                       {note.category && (
-                        <span>-: " {note.category?.name} "</span>
+                        <span>{note.category?.name}</span>
                       )}
+                      </p> 
                     </h5>
-                    <p className="text-muted small">
+                    <p className="card-text description">{note.description}</p>
+                    <p className="text-muted mb-0 small">
                       {formatDate(note.createdAt)}
                     </p>
-                    <p className="card-text description">{note.description}</p>
                     <button
                       className="btn btn-link delete-btn"
                       data-bs-toggle="modal"

@@ -35,7 +35,7 @@ function Sidebar() {
           className="nav-link nav-link-custom"
           data-bs-toggle="tooltip"
           data-bs-placement="right"
-          title="Categories"
+          title="Devices"
         >
           <i className="bx bxs-devices" />
           <span className="nav-text nav-text-custom">Devices</span>
@@ -47,10 +47,10 @@ function Sidebar() {
           className="nav-link nav-link-custom"
           data-bs-toggle="tooltip"
           data-bs-placement="right"
-          title="Categories"
+          title="Projects"
         >
           <i className="bx bx-food-menu" />
-          <span className="nav-text nav-text-custom">Subjects</span>
+          <span className="nav-text nav-text-custom">Projects</span>
         </a>
       </li>
     </ul>

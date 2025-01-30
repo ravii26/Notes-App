@@ -189,7 +189,7 @@ function AddProduct() {
   return (
     <div>
       <div className="container my-5 body-add-product">
-        <h1 className="mb-4">Edit Products</h1>
+        <h1 className="mb-4">Edit Projects</h1>
         <div className="row">
           {/* Left Form Section */}
           <div className="col-lg-7">
