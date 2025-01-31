@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "../assets/profile.png";
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../redux/slices/authSlice';
+
 
 function Profile() {
   const [error, setError] = useState("");
@@ -12,6 +15,10 @@ function Profile() {
   });
 
   const [imagePreview, setImagePreview] = useState(Image);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -34,6 +41,7 @@ function Profile() {
         if (profileImage) {
           setImagePreview(`data:image/png;base64,${profileImage}`);
         }
+        dispatch(setUser(data.user));
       } catch (err) {
         console.error(err);
       }

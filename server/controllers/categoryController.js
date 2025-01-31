@@ -22,6 +22,25 @@ const getCategories = async (req, res) => {
   }
 };
 
+const updateCategory = async (req, res) => {
+  try {
+    const { name, description, categoryId } = req.body;
+
+    const category = await Category.findOne({ _id: categoryId });
+    if (!category)
+      return res.status(404).send({ message: "Category not found" });
+
+    category.name = name;
+    category.description = description;
+    await category.save();
+
+    res.status(200).send({ message: "Category updated successfully", category });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
 const createCategory = async (req, res) => {
   try {
     const user = req.body.user;
@@ -54,4 +73,4 @@ const deleteCategory = async (req, res) => {
   }
 };
 
-export { getCategories, createCategory, deleteCategory };
+export { getCategories, createCategory, deleteCategory, updateCategory };

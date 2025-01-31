@@ -6,7 +6,9 @@ import Image from "../assets/profile.png";
 function Header() {
   const navigate = useNavigate();
   const handleLogout = async () => {
-    const token = localStorage.getItem("token");
+    const result = window.confirm("Are you sure you want to logout?");
+    if(result){
+      const token = localStorage.getItem("token");
     const deviceId = localStorage.getItem("deviceId");
     try {
       await axios.post("http://localhost:5000/api/v1/logout-device", {
@@ -22,6 +24,7 @@ function Header() {
       navigate("/");
     } catch (error) {
       console.error(error);
+    }
     }
   };
 

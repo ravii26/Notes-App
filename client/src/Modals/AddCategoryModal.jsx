@@ -11,7 +11,7 @@ function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCa
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      handleAddCategory(); // Save the category if no errors
+      handleAddCategory();
       closeModal();
     }
   };
@@ -50,7 +50,7 @@ function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCa
               {/* Name Field */}
               <div className="mb-3 text-start">
                 <label htmlFor="categoryName" className="form-label">
-                  Name <span style={{ color: "red" }}>*</span>
+                  Name<span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
@@ -70,7 +70,7 @@ function AddCategoryModal({ showCategory, setShowCategory, newCategory, setNewCa
               {/* Description Field */}
               <div className="mb-3 text-start">
                 <label htmlFor="categoryDescription" className="form-label">
-                  Description <span style={{ color: "red" }}>*</span>
+                  Description<span style={{ color: "red" }}>*</span>
                 </label>
                 <textarea
                   className="form-control"

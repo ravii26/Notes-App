@@ -51,7 +51,7 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               {/* Title Field */}
               <div className="mb-3 text-start">
                 <label htmlFor="noteTitle" className="form-label">
-                  Title <span style={{ color: "red" }}>*</span>
+                  Title<span style={{ color: "red" }}>*</span>
                 </label>
                 <input
                   type="text"
@@ -71,7 +71,7 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               {/* Description Field */}
               <div className="mb-3 text-start">
                 <label htmlFor="noteDescription" className="form-label">
-                  Description <span style={{ color: "red" }}>*</span>
+                  Description<span style={{ color: "red" }}>*</span>
                 </label>
                 <textarea
                   className="form-control"
@@ -91,7 +91,7 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               {/* Category Field */}
               <div className="mb-3 text-start">
                 <label htmlFor="noteCategory" className="form-label">
-                  Category <span style={{ color: "red" }}>*</span>
+                  Category<span style={{ color: "red" }}>*</span>
                 </label>
                 <select
                   id="noteCategory"

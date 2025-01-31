@@ -510,7 +510,9 @@ function AddProduct() {
             Submit
           </button>
           <button type="button" className="btn btn-secondary">
-            Cancel
+            <a href="/products" style={{ color: "white", textDecoration: "none" }}>
+              Cancel
+              </a>
           </button>
         </div>
       </div>
