@@ -132,12 +132,6 @@ function Profile() {
           />
         </div>
         {isEditing && (
-          <button type="button" className="btn btn-outline-primary btn-md mb-3">
-            + Add Email Address
-          </button>
-        )}
-
-        {isEditing && (
           <div className="text-center mt-4">
             <button type="submit" className="btn btn-success btn-md">Save Changes</button>
           </div>

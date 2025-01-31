@@ -13,10 +13,10 @@ function DeleteModal(props) {
     <div className="modal-dialog modal-dialog-centered">
       <div className="modal-content modal-content-custom">
         <div className="modal-header modal-header-custom">
-          <h5 className="modal-title text-center">Delete Note</h5>
+          <h5 className="modal-title text-center mt-2 fs-3">Are you sure?</h5>
         </div>
         <div className="modal-body modal-body-custom">
-          Are you sure you want to delete this note?
+          Do you really want to delete this? This action cannot be undone.
         </div>
         <div className="modal-footer modal-footer-custom">
           <button
