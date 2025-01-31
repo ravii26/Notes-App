@@ -240,11 +240,13 @@ function Home() {
                   >
                     <h5 className="card-title">
                     {note.title}{" "}
+                    {note.category && (
                       <p className="category">
-                      {note.category && (
+                      
                         <span>{note.category?.name}</span>
+                        </p> 
                       )}
-                      </p> 
+                     
                     </h5>
                     <p className="card-text description">{note.description}</p>
                     <p className="text-muted mb-0 small">
