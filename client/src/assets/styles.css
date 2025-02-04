@@ -949,7 +949,8 @@ h3 {
 .body-add-product {
   background-color: #f1f1f2;
   font-family: Arial, sans-serif;
-  margin-left: 215px;
+  margin-left: 200px;
+  width: auto;
 }
 .required:after {
   content: "*";
