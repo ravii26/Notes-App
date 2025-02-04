@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { addCategory } from "services/apiServices";
+import AddCategoryModal from "./AddCategoryModal";
 
 function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categories }) {
   const [errors, setErrors] = useState({ title: "", description: "", category: "" });
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false); // Add Category Modal State
 
   const handleSave = () => {
     const newErrors = {};
@@ -24,6 +27,9 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
   };
 
   return (
+    <>
+      {/* Main Add Note Modal */}
+      
     <div
       className={`modal fade ${show ? "show" : ""}`}
       id="addNoteModal"
@@ -135,7 +141,15 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Add Category Modal */}
+      {showAddCategoryModal && (
+        <AddCategoryModal
+          show={showAddCategoryModal}
+          setShow={setShowAddCategoryModal}
+        />
+      )}
+    </>
   );
 }
 

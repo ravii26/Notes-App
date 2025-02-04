@@ -15,6 +15,7 @@ function Profile() {
   });
 
   const [imagePreview, setImagePreview] = useState(Image);
+  const [isEditing, setIsEditing] = useState(false);
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -23,7 +24,6 @@ function Profile() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setProfile({ ...profile, profileImage: file });
-    console.log(URL.createObjectURL(file));
     setImagePreview(URL.createObjectURL(file));
   };
 
@@ -31,15 +31,17 @@ function Profile() {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/v1/get-profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const { firstName, lastName, email, profileImage } = data.user;
-          setProfile({ firstName, lastName, email, profileImage });
-        if (profileImage) {
-          setImagePreview(`data:image/png;base64,${profileImage}`);
+        const { data } = await axios.get(
+          "http://localhost:5000/api/v1/get-profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setProfile(data.user);
+        if (data.user.profileImage) {
+          setImagePreview(`data:image/png;base64,${data.user.profileImage}`);
         }
         dispatch(setUser(data.user));
       } catch (err) {
@@ -60,7 +62,7 @@ function Profile() {
 
     try {
       const { data } = await axios.put(
-        `http://localhost:5000/api/v1/update-profile`,
+        "http://localhost:5000/api/v1/update-profile",
         profile,
         {
           headers: {
@@ -71,99 +73,106 @@ function Profile() {
       );
       setProfile(data);
       alert("Profile updated successfully!");
+      setIsEditing(false);
     } catch (err) {
       setError(err.response.data.message);
       console.error(err);
       alert("Error updating profile.");
     }
   };
-  return (
-    <div>
-      <div className="container mt-5">
-        <div className="row">
-          {/* Profile Picture */}
-          <div className="col-md-4 text-center">
-            <div className="profile-pic mb-4">
-              {imagePreview && (
-                <img
-                  src={imagePreview || Image}
-                  alt="Profile"
-                  className="rounded-circle"
-                  width={150}
-                  height={150}
-                />
-              )}
-              <div className="file-upload-container">
-                {/* Optional label for better UX */}
-                <label htmlFor="file-upload" className="file-upload-label">
-                  <i className="bx bx-upload" /> Choose File
-                </label>
-                <input
-                  type="file"
-                  id="file-upload"
-                  className="file-upload-input"
-                  onChange={handleImageChange}
-                />
-              </div>
-            </div>
-          </div>
-          {/* Details */}
-          <div className="col-md-8">
-            <div className="details-header">
-              <span>Details</span>
-            </div>
-            <form>
-              <div className="form-group form-group-custom mb-3">
-                <label htmlFor="firstName">First Name:</label>
-                <input
-                  type="text"
-                  name="firstName"
-                  className="form-control rounded-3"
-                  placeholder="First Name"
-                  value={profile.firstName}
-                  onChange={handleChange}
-                  contentEditable={true}
-                />
-                <i className="bx bx-pencil input-icon" />
-              </div>
-              <div className="form-group form-group-custom mb-3">
-                <label htmlFor="lastName">Last Name:</label>
-                <input
-                  type="text"
-                  name="lastName"
-                  className="form-control rounded-3"
-                  placeholder="Last Name"
-                  value={profile.lastName}
-                  onChange={handleChange}
-                />
-                <i className="bx bx-pencil input-icon" />
-              </div>
-              <div className="form-group form-group-custom mb-3">
-                <label htmlFor="email">Email:</label>
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control rounded-3"
-                  placeholder="Email"
-                  value={profile.email}
-                  onChange={handleChange}
-                />
-                <i className="bx bx-pencil input-icon" />
-              </div>
-              {error && <div className="alert alert-danger">{error}</div>}
 
-              <div className="text-center">
-                <button
-                  type="submit"
-                  className="btn btn-success"
-                  onClick={handleSubmit}
-                >
-                  Save Changes
-                </button>
-              </div>
-            </form>
+  return (
+    <div className="profile">
+      <div className="container profileheading mb-0">
+        <p>Profile</p>
+      </div>
+      <div className="container mt-4 p-5 shadow rounded bg-white">
+        <div className="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row">
+          <div className="d-flex align-items-center mb-3 mb-md-0">
+            <label
+              htmlFor="profileImage"
+              style={{ cursor: isEditing ? "pointer" : "default" }}
+            >
+              <img
+                src={imagePreview}
+                alt="Profile"
+                className="rounded-circle me-2"
+                width={150}
+                height={150}
+                style={{
+                  objectFit: "cover",
+                  border: isEditing ? "2px solid #007bff" : "none", 
+                }}
+              />
+            </label>
+            {isEditing && (
+              <input
+                type="file"
+                id="profileImage"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleImageChange}
+              />
+            )}
+            <div>
+              <h4>
+                {profile.firstName} {profile.lastName || "Your Name"}
+              </h4>
+              <p className="text-muted small">{profile.email}</p>
+            </div>
           </div>
+          <button
+            className="btn btn-primary btn-md"
+            onClick={() => setIsEditing(!isEditing)}
+          >
+            {isEditing ? "Cancel" : "Edit"}
+          </button>
         </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="col-12 col-md-6 mb-3">
+              <label>First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                className="form-control"
+                value={profile.firstName}
+                onChange={handleChange}
+                disabled={!isEditing}
+              />
+            </div>
+            <div className="col-12 col-md-6 mb-3">
+              <label>Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                className="form-control"
+                value={profile.lastName}
+                onChange={handleChange}
+                disabled={!isEditing}
+              />
+            </div>
+          </div>
+
+          <h6 className="mt-3">My Email Address</h6>
+          <div className="d-flex align-items-center mb-3">
+            <input
+              type="email"
+              className="form-control"
+              value={profile.email}
+              onChange={handleChange}
+              disabled={!isEditing}
+            />
+          </div>
+          {isEditing && (
+            <div className="text-center mt-4">
+              <button type="submit" className="btn btn-success btn-md">
+                Save Changes
+              </button>
+            </div>
+          )}
+        </form>
       </div>
     </div>
   );
