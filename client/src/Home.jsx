@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import AddNoteModal from "Modals/AddNoteModal";
 import DeleteModal from "Modals/DeleteModal";
 import Pagination from "Helper/Pagination";
 import { onMessageListener } from "utils/firebaseUtils";
 import { ToastContainer, toast } from "react-toastify";
-import { formatDate } from "utils/CommonHelper";
-import { addNote } from "services/apiServices";
+import { formatDate, checkToken } from "utils/CommonHelper";
+import {
+  addNote,
+  deleteNote,
+  getNotes,
+  fetchCategories,
+} from "services/apiServices";
+import { fetchNotesByCategory } from "services/apiServices";
 
 function Home() {
   const navigate = useNavigate();
@@ -29,15 +34,14 @@ function Home() {
   const [totalPages, setTotalPages] = useState(1);
   const [notesPerPage, setNotesPerPage] = useState(6);
   const notesPerPageOptions = [4, 6, 8, 10];
+  const [currentCategory, setCurrentCategory] = useState(null);
 
   const handleNoteClick = (noteId) => {
     navigate(`/notes/${noteId}`);
   };
 
   const handleAddNote = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please login first");
+    if (!checkToken()) {
       navigate("/");
       return;
     }
@@ -56,22 +60,13 @@ function Home() {
 
   const handleDelete = async () => {
     if (!selectedNoteId) return;
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please login first");
+    if (!checkToken()) {
       navigate("/");
       return;
     }
 
     try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/v1/delete-note/${selectedNoteId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await deleteNote(selectedNoteId);
       if (response.status === 200) {
         setNotes((prevNotes) =>
           prevNotes.filter((note) => note._id !== selectedNoteId)
@@ -104,53 +99,35 @@ function Home() {
     })
     .catch((err) => console.log("failed", err));
 
+  const fetchAllCategories = async () => {
+    try {
+      const response = await fetchCategories();
+      setCategories(response.data.categories);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  const fetchNotes = async () => {
+    if (!checkToken()) {
+      navigate("/");
+      return;
+    }
+    try {
+      const response = await getNotes(currentPage, notesPerPage);
+
+      setNotes(response?.data?.notes || []);
+      setTotalPages(response.data.totalPages || 1);
+      setNotesSave(response.data.notes || []);
+      setCurrentCategory(null);
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchNotes = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        alert("Please login first");
-        navigate("/");
-        return;
-      }
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/v1/get-notes?page=${currentPage}&limit=${notesPerPage}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setNotes(response.data.notes || []);
-        setTotalPages(response.data.totalPages || 1);
-        setNotesSave(response.data.notes || []);
-      } catch (error) {
-        console.error("Error fetching notes:", error);
-        localStorage.removeItem("token");
-        if (error.response?.status === 401) {
-          alert("Invalid or expired token. Please login again.");
-          navigate("/");
-        }
-      }
-    };
-    const fetchCategories = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:5000/api/v1/get-categories",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
     fetchNotes();
-    fetchCategories();
+    fetchAllCategories();
     // fetchFCMToken();
   }, [navigate, variable, currentPage, notesPerPage]);
 
@@ -185,12 +162,28 @@ function Home() {
         note.title.toLowerCase().includes(e.target.value.toLowerCase())
       )
     );
+    setCurrentCategory(null);
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  const notesByCategory = async (categoryId) => {
+    if (!checkToken()) {
+      navigate("/");
+      return;
+    }
+    try {
+      const response = await fetchNotesByCategory(categoryId);
+      if (response.status === 200) {
+        setNotes(response.data.notes);
+        setCurrentCategory(categoryId);
+      }
+    } catch {
+      console.error("Error fetching notes by category");
+    }
+  };
   return (
     <div className="body-home">
       <div>
@@ -214,6 +207,23 @@ function Home() {
               </div>
             </div>
           </div>
+          <div className="category-tabs-container">
+            <div className="category-tabs d-flex justify-content">
+              {categories.map((category) => (
+                <button
+                  className={
+                    category._id === currentCategory
+                      ? "active-category-tab"
+                      : "category-tab"
+                  }
+                  key={category._id}
+                  onClick={() => notesByCategory(category._id)}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="container mt-4">
             <div className="row g-4">
@@ -234,19 +244,15 @@ function Home() {
                 <div className="col-md-4" key={note._id}>
                   <div
                     className="card note-card shadow-sm p-3 border-0"
-                    onClick={() =>
-                      handleNoteClick(note._id)
-                    }
+                    onClick={() => handleNoteClick(note._id)}
                   >
                     <h5 className="card-title">
-                    {note.title}{" "}
-                    {note.category && (
-                      <p className="category">
-                      
-                        <span>{note.category?.name}</span>
-                        </p> 
+                      {note.title}{" "}
+                      {note.category && (
+                        <p className="category">
+                          <span>{note.category?.name}</span>
+                        </p>
                       )}
-                     
                     </h5>
                     <p className="card-text description">{note.description}</p>
                     <p className="text-muted mb-0 small">

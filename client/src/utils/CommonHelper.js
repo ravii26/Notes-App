@@ -1,3 +1,5 @@
+
+
 export const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getDate();
@@ -14,4 +16,14 @@ export const formatDate = (dateString) => {
         : "th";
 
     return `${day}${suffix} ${month} ${year}`;
-  };
+};
+  
+export const checkToken = () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+      alert("Please login first");
+      return false;
+  }
+  return true;
+}

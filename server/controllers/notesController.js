@@ -55,7 +55,7 @@ const createNote = async (req, res) => {
       description,
       user: user._id,
       category,
-    })
+    });
 
     note = await Note.findOne({ _id: note._id }).populate("category");
 
@@ -68,7 +68,7 @@ const createNote = async (req, res) => {
 
 const deleteNote = async (req, res) => {
   try {
-    const {  noteId } = req.params;
+    const { noteId } = req.params;
 
     const note = await Note.findOneAndDelete({ _id: noteId });
     if (!note) return res.status(404).send({ message: "Note not found" });
@@ -127,19 +127,19 @@ const searchNotes = async (req, res) => {
       notes = await Note.find({
         $or: [
           { title: { $regex: searchText, $options: "i" } },
-          { description: { $regex: searchText, $options: "i" } }
-        ]
-      })
+          { description: { $regex: searchText, $options: "i" } },
+        ],
+      });
     } else {
       notes = await Note.find({
         user: user._id,
         $or: [
           { title: { $regex: searchText, $options: "i" } },
-          { description: { $regex: searchText, $options: "i" } }
-        ]
+          { description: { $regex: searchText, $options: "i" } },
+        ],
       });
     }
-    
+
     if (!notes) return res.status(404).send({ message: "Notes not found" });
 
     res.status(200).send({ notes });
@@ -149,4 +149,27 @@ const searchNotes = async (req, res) => {
   }
 };
 
-export { getNotes, createNote, deleteNote, getNote, updateNote, searchNotes };
+const getNotesByCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.body;
+    const user = req.body.user;
+    let notes;
+
+    if (user.isAdmin) {
+      notes = await Note.find({ category: categoryId }).populate("category");
+    } else {
+      notes = await Note.find({
+        category: categoryId,
+        user: user._id,
+      }).populate("category");
+    }
+    if (!notes) return res.status(404).send({ message: "Notes not found" });
+
+    res.status(200).send({ notes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
+export { getNotes, createNote, deleteNote, getNote, updateNote, searchNotes, getNotesByCategory };

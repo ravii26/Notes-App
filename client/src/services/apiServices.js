@@ -33,6 +33,15 @@ export const addNote = async (note) => {
     }
 };
 
+export const getNotes = async (currentPage, notesPerPage) => {
+    try {
+        const response = await apiClient.get(`/get-notes?page=${currentPage}&limit=${notesPerPage}`);
+        return response;
+    } catch (error) {
+        throw error.response.data;
+    }
+}
+
 export const registerUser = async (data) => {
     try {
         const response = await apiClient.post('/register', data);
@@ -73,7 +82,7 @@ export const updateNote = async (noteId, note) => {
 export const deleteNote = async (noteId) => {
     try {
         const response = await apiClient.delete(`/delete-note/${noteId}`);
-        return response.data;
+        return response;
     } catch (error) {
         throw error.response.data;
     }
@@ -82,11 +91,20 @@ export const deleteNote = async (noteId) => {
 export const fetchCategories = async () => {
     try {
         const response = await apiClient.get('/get-categories');
-        return response.data.categories;
+        return response;
     } catch (error) {
         throw error.response.data;
     }
 };
+
+export const fetchNotesByCategory = async (categoryId) => { 
+    try {
+        const response = await apiClient.post(`/get-notes-by-category`, { categoryId });        
+        return response;
+    } catch (error) {
+        throw error.response.data;
+    }
+}
 
 export const addCategory = async (category) => {
     try {

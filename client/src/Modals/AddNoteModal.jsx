@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { addCategory } from "services/apiServices";
+// import { addCategory } from "services/apiServices";
 import AddCategoryModal from "./AddCategoryModal";
 
 function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categories }) {
   const [errors, setErrors] = useState({ title: "", description: "", category: "" });
-  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false); // Add Category Modal State
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
 
   const handleSave = () => {
     const newErrors = {};
@@ -95,31 +95,45 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
               </div>
 
               {/* Category Field */}
-              <div className="mb-3 text-start">
-                <label htmlFor="noteCategory" className="form-label">
-                  Category<span style={{ color: "red" }}>*</span>
-                </label>
-                <select
-                  id="noteCategory"
-                  className="form-control"
-                  value={newNote.category}
-                  onChange={(e) =>
-                    setNewNote({ ...newNote, category: e.target.value })
-                  }
-                >
-                  <option disabled hidden value="">
-                    Select Category
-                  </option>
-                  {categories.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+
+                <div className="mb-3 text-start">
+                  <label htmlFor="noteCategory" className="form-label">
+                    Category<span style={{ color: "red" }}>*</span>
+                  </label>
+                  <div className="d-flex align-items-center">
+                    <select
+                      id="noteCategory"
+                      className="form-control me-2"
+                      value={newNote.category}
+                      onChange={(e) =>
+                        setNewNote({ ...newNote, category: e.target.value })
+                      }
+                    >
+                      <option disabled hidden value="">
+                        Select Category
+                      </option>
+                      {categories.map((category) => (
+                        <option key={category._id} value={category._id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                    {/* Add Category Button */}
+                    <button
+                      type="button"
+                      className="btn btn-outline-warning "
+                      onClick={() => setShowAddCategoryModal(true)}
+                    >
+                      ➕ 
+                    </button>
+                  </div>
+                  {errors.category && (
+                    <div style={{ color: "red", marginTop: "5px" }}>{errors.category}</div>
+                  )}
+                </div>
                 {errors.category && (
                   <div style={{ color: "red", marginTop: "5px" }}>{errors.category}</div>
                 )}
-              </div>
             </form>
           </div>
           <div className="modal-footer modal-footer-custom">
@@ -148,7 +162,8 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
           show={showAddCategoryModal}
           setShow={setShowAddCategoryModal}
         />
-      )}
+        )}
+        </div>
     </>
   );
 }
