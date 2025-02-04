@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Devices() {
   const [devices, setDevices] = useState([
@@ -9,6 +10,7 @@ function Devices() {
       lastLogin: "",
     },
   ]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -28,14 +30,21 @@ function Devices() {
   }, []);
     
     const handleDelete = async (deviceId) => {
-        const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
+      const currentDeviceId = localStorage.getItem("deviceId");
         try {   
             const response = await axios.get(`http://localhost:5000/api/v1/remove-device?deviceId=${deviceId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            if (response.status === 200) {
+          if (response.status === 200) {
+            if (currentDeviceId === deviceId) {
+              localStorage.removeItem("token");
+              localStorage.removeItem("deviceId");
+              alert("Device removed successfully. Please login again.");
+              navigate("/");
+            }
                 setDevices(devices.filter((device) => device.deviceId !== deviceId));
             }
         }
@@ -81,7 +90,7 @@ function Devices() {
                 <th>No.</th>
                 <th>ID</th>
                 <th>Last Login Date</th>
-                            <th>Device Name</th>
+                <th>Device Name</th>
                 <th>Logout</th>
               </tr>
             </thead>
@@ -95,7 +104,10 @@ function Devices() {
                   <td>
                     <button
                       className="btn btn-danger btn-danger-c btn-sm m-2"
-                      onClick={() => handleDelete(device.deviceId)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDelete(device.deviceId)
+                      }}
                     >
                       <i className="bx bx-trash" />
                     </button>

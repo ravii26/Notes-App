@@ -24,7 +24,6 @@ function Login() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      alert("you are already logged in");
       navigate("/notes");
     }
   }, [navigate, data]);
