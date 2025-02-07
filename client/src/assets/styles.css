@@ -242,7 +242,7 @@
   .container-auth {
     flex-direction: column;
     padding: 10px;
-    margin:40px;
+    margin: 40px;
   }
 
   .left-panel {
@@ -591,14 +591,13 @@ h5.modal-title {
 }
 
 .sidebar {
-  position: sticky;
+  position: fixed;
   width: auto;
   height: 200vh;
   margin-top: 66px;
   background-color: #a0bbba;
   padding: 15px;
-  transition: width 0.3s ease-in-out;
-  position: fixed;
+  transition: width 0.5s ease-in-out;
   top: 0;
   left: 0;
   display: flex;
@@ -627,7 +626,7 @@ h5.modal-title {
 
 .nav-link-custom {
   display: flex;
-  align-items: center;  
+  align-items: center;
   padding: 15px 15px 15px 7px;
   color: #fff;
   text-decoration: none;
@@ -718,8 +717,8 @@ h5.modal-title {
 .user-icon .user-img {
   width: 100%;
   height: 100%;
-  object-fit:cover;
-  border: none
+  object-fit: cover;
+  border: none;
 }
 
 .profile-pic {
@@ -731,7 +730,7 @@ h5.modal-title {
 }
 
 .profile-pic img {
-  object-fit:cover;
+  object-fit: cover;
   border: 5px solid #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -868,7 +867,6 @@ h3 {
   min-width: 600px; /* Adjust based on your content */
 }
 
-
 .category-table-c thead th {
   background-color: #97d1af;
   border-bottom: 1px solid #ccc;
@@ -1001,7 +999,7 @@ h3 {
   background-repeat: no-repeat;
   /* background-position: 85px 14px; */
   background-color: white;
-  
+
   &:hover {
     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25);
   }
@@ -1017,7 +1015,7 @@ h3 {
   }
 }
 
-.category{
+.category {
   font-size: small;
   background-color: #dddedf;
   display: inline-block;
@@ -1026,12 +1024,83 @@ h3 {
   margin-bottom: -10px;
 }
 
-.profile{
+.profile {
   margin-left: 175px;
 }
 
-.profileheading{
+.profileheading {
   font-size: 30px;
   margin-top: 15px;
   margin-bottom: -150px;
 }
+
+.toolbar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 5px;
+  background: #f1f1f2;
+  padding: 8px;
+  border-radius: 5px;
+}
+.toolbar button {
+  color: rgb(102, 102, 102);
+  background: none;
+  border: none;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.toolbar button:hover {
+  background: rgba(148, 145, 145, 0.2);
+  border-radius: 3px;
+}
+.drawing-container {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+canvas {
+  border: 1px solid #ccc;
+}
+
+/* Sidebar Collapsible Button */
+.toggle-btn {
+  position: absolute;
+  top: 15px;
+  right: -15px;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s;
+  z-index: 1100;
+}
+
+.toggle-btn i {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar.collapsed .nav-text {
+  display: none;
+}
+
+.sidebar.collapsed .nav-link {
+  justify-content: center;
+}
+
