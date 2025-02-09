@@ -2,9 +2,9 @@ import React, { useState } from "react";
 // import { addCategory } from "services/apiServices";
 import AddCategoryModal from "./AddCategoryModal";
 
-function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categories }) {
+function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categories, setVariable, variable }) {
   const [errors, setErrors] = useState({ title: "", description: "", category: "" });
-  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleSave = () => {
     const newErrors = {};
@@ -122,7 +122,7 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
                     <button
                       type="button"
                       className="btn btn-outline-warning "
-                      onClick={() => setShowAddCategoryModal(true)}
+                      onClick={() => setModalVisible(true)}
                     >
                       ➕ 
                     </button>
@@ -157,12 +157,13 @@ function AddNoteModal({ show, setShow, newNote, setNewNote, handleAddNote, categ
       </div>
 
       {/* Add Category Modal */}
-      {showAddCategoryModal && (
         <AddCategoryModal
-          show={showAddCategoryModal}
-          setShow={setShowAddCategoryModal}
+          show={modalVisible}
+          onClose={() =>  {
+            setVariable(!variable)
+            setModalVisible(false)}}
         />
-        )}
+        
         </div>
     </>
   );

@@ -1,168 +1,109 @@
+// Categories.js
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import AddCategoryModal from "Modals/AddCategoryModal";
+// import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import AddCategoryModal from "Modals/AddCategoryModal";
+import { fetchCategories } from "services/apiServices";
+import { checkToken } from "utils/CommonHelper";
+import { deleteCategory } from "services/apiServices";
+// import { ColorPicker, useColor } from "react-color-palette";
+// import "react-color-palette/lib/css/styles.css";
 
 function Categories() {
   const [categories, setCategories] = useState([]);
-  const [save, setSave] = useState([]);
-  const [variable, setVariable] = useState(false);
-  const [categoryId, setCategoryId] = useState("");
+  const [backupCategories, setBackupCategories] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
   const navigate = useNavigate();
+ 
 
-  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
-  const [newCategory, setNewCategory] = useState({
-    name: "",
-    description: "",
-  });
-
-  const handleAddCategory = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please login first");
-      navigate("/");
-      return;
-    }
-
+  const fetchAllCategories = async () => {
     try {
-      if (categoryId) {
-        const response = await axios.post(
-          "http://localhost:5000/api/v1/update-category",
-          {
-            name: newCategory.name,
-            description: newCategory.description,
-            categoryId: categoryId,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 200) {
-          setShowAddCategoryModal(false);
-          setNewCategory({ name: "", description: "" });
-          setVariable(!variable);
-          setCategoryId("");
-        }
-      } else {
-        const response = await axios.post(
-          "http://localhost:5000/api/v1/create-category",
-          {
-            ...newCategory,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        if (response.status === 201) {
-          setCategories([...categories, response.data.category]);
-          setSave([...categories, response.data.category]);
-          setNewCategory({ title: "", description: "" });
-          setShowAddCategoryModal(false);
-        }
-      }
+      const response = await fetchCategories();
+      setCategories(response.data.categories);
+      setBackupCategories(response.data.categories);
     } catch (error) {
-      console.log("Error adding note:", error);
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllCategories();
+  }, []);
+
+  const handleSearch = (e) => {
+    const searchText = e.target.value.toLowerCase();
+    if (searchText === "") {
+      setCategories(backupCategories);
+    } else {
+      const filtered = backupCategories.filter(
+        (category) =>
+          category.name.toLowerCase().includes(searchText) ||
+          category.description.toLowerCase().includes(searchText)
+      );
+      setCategories(filtered);
     }
   };
 
   const handleDelete = async (categoryId) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please login first");
+    if (!checkToken()) {
       navigate("/");
       return;
     }
-
     try {
-      const response = await axios.delete(
-        `http://localhost:5000/api/v1/delete-category?categoryId=${categoryId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await deleteCategory(categoryId);
       if (response.status === 200) {
         const updatedCategories = categories.filter(
           (category) => category._id !== categoryId
         );
         setCategories(updatedCategories);
-        setSave(updatedCategories);
-        setNewCategory({ title: "", description: "" });
+        setBackupCategories(updatedCategories);
       }
     } catch (error) {
       console.error("Error deleting category:", error);
     }
   };
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:5000/api/v1/get-categories",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setCategories(response.data.categories);
-        setSave(response.data.categories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-    fetchCategories();
-  }, [variable]);
-
-  const handleSearch = (e) => {
-    setCategories(
-      save.filter(
-        (category) =>
-          category.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-          category.description
-            .toLowerCase()
-            .includes(e.target.value.toLowerCase())
-      )
-    );
-    if (e.target.value === "") {
-      setVariable(!variable);
+  const handleModalSuccess = (category) => {
+    if (editingCategory) {
+      const updatedList = categories.map((cat) =>
+        cat._id === category._id ? category : cat
+      );
+      setCategories(updatedList);
+      setBackupCategories(updatedList);
+    } else {
+      const updatedList = [...categories, category];
+      setCategories(updatedList);
+      setBackupCategories(updatedList);
     }
   };
 
-  const updatedCategory = async (categoryId, name, description) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return;
-    }
-    setNewCategory({ name: name, description: description });
-    setShowAddCategoryModal(true);
-    setCategoryId(categoryId);
+  // const openModalForAdd = () => {
+  //   setEditingCategory(null);
+  //   setModalVisible(true);
+  // };
+
+  const openModalForEdit = (category = null) => {
+    setEditingCategory(category);
+    setModalVisible(true);
   };
 
   return (
     <div>
       <div className="container main-content">
-        <div className="container ">
+        <div className="container">
           <div className="d-flex justify-content-center">
             <div className="input-group">
               <input
                 type="text"
                 className="form-control"
                 placeholder="Search..."
-                aria-label="Search"
-                aria-describedby="basic-addon1"
                 onChange={handleSearch}
               />
             </div>
           </div>
         </div>
-        {categories.length === 0 && (
+        {categories.length === 0 ? (
           <h1
             style={{
               textAlign: "center",
@@ -174,15 +115,13 @@ function Categories() {
           >
             No Categories available
           </h1>
-        )}
-        {categories.length > 0 && (
+        ) : (
           <div
-            className="table-responsive-wrapper"
-            style={{ overflowX: "auto", marginTop: "20px" }}
+            className="table-responsive-wrapper table-wrapper-custom"
           >
             <table
               className="category-table-c table table-bordered"
-              style={{ minWidth: "600px" }} // Ensure table has a minimum width
+              style={{ minWidth: "600px" }}
             >
               <thead>
                 <tr>
@@ -194,20 +133,14 @@ function Categories() {
               </thead>
               <tbody>
                 {categories.map((category, index) => (
-                  <tr key={index}>
+                  <tr key={category._id}>
                     <td>{index + 1}</td>
                     <td>{category.name}</td>
                     <td>{category.description}</td>
                     <td>
                       <button
                         className="btn btn-primary btn-sm m-2"
-                        onClick={() =>
-                          updatedCategory(
-                            category._id,
-                            category.name,
-                            category.description
-                          )
-                        }
+                        onClick={() => openModalForEdit(category)}
                       >
                         <i className="bx bx-edit" />
                       </button>
@@ -224,11 +157,10 @@ function Categories() {
             </table>
           </div>
         )}
-
         <button
           className="btn add-note-btn"
           style={{ backgroundColor: "#f7de52" }}
-          onClick={() => setShowAddCategoryModal(true)}
+          onClick={openModalForEdit}
         >
           <span className="plus-sign">
             <i className="bx bx-duplicate"></i>
@@ -236,12 +168,18 @@ function Categories() {
         </button>
       </div>
       <AddCategoryModal
-        showCategory={showAddCategoryModal}
-        setShowCategory={setShowAddCategoryModal}
-        newCategory={newCategory}
-        setNewCategory={setNewCategory}
-        handleAddCategory={handleAddCategory}
-        categoryId={categoryId}
+        show={modalVisible}
+        onClose={() => setModalVisible(false)}
+        categoryId={editingCategory ? editingCategory._id : ""}
+        initialData={
+          editingCategory
+            ? {
+                name: editingCategory.name,
+                description: editingCategory.description,
+              }
+            : { name: "", description: "" }
+        }
+        onSuccess={handleModalSuccess}
       />
     </div>
   );

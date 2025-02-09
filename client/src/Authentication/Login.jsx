@@ -3,10 +3,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Logo from "../assets/logo.svg";
-import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 // import { useAuth0 } from "@auth0/auth0-react";
 import { useGoogleLogin } from "@react-oauth/google";
+import { generateDeviceId } from "utils/CommonHelper";
 
 function Login() {
   const [logindata, setLoginData] = useState({
@@ -32,50 +32,13 @@ function Login() {
     setLoginData({ ...logindata, [e.target.name]: e.target.value });
   };
 
-  const generateDeviceId = () => {
-    const getBrowserName = () => {
-      const userAgent = navigator.userAgent;
-
-      if (userAgent.includes("Chrome")) {
-        if (userAgent.includes("Edg")) {
-          return "Microsoft Edge";
-        }
-        return "Google Chrome";
-      }
-      if (userAgent.includes("Firefox")) {
-        return "Mozilla Firefox";
-      }
-      if (userAgent.includes("Safari")) {
-        if (userAgent.includes("Chrome")) {
-          return "Google Chrome";
-        }
-        return "Apple Safari";
-      }
-      if (userAgent.includes("MSIE") || userAgent.includes("Trident")) {
-        return "Internet Explorer";
-      }
-      if (userAgent.includes("Opera") || userAgent.includes("OPR")) {
-        return "Opera";
-      }
-
-      return "Unknown Browser";
-    };
-
-    let deviceId = localStorage.getItem("deviceId");
-    logindata.browserName = getBrowserName();
-
-    if (!deviceId) {
-      deviceId = uuidv4();
-      localStorage.setItem("deviceId", deviceId);
-    }
-
-    return deviceId;
-  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      logindata.deviceId = generateDeviceId();
+      const {deviceId, browserName} = generateDeviceId();
+      logindata.deviceId = deviceId;
+      logindata.browserName = browserName;
       const url = "http://localhost:5000/api/v1/login";
       const response = await axios.post(url, logindata);
       localStorage.setItem("token", response.data.data);

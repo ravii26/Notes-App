@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 
 
 export const formatDate = (dateString) => {
@@ -27,3 +28,43 @@ export const checkToken = () => {
   }
   return true;
 }
+
+export const generateDeviceId = () => {
+  const getBrowserName = () => {
+    const userAgent = navigator.userAgent;
+
+    if (userAgent.includes("Chrome")) {
+      if (userAgent.includes("Edg")) {
+        return "Microsoft Edge";
+      }
+      return "Google Chrome";
+    }
+    if (userAgent.includes("Firefox")) {
+      return "Mozilla Firefox";
+    }
+    if (userAgent.includes("Safari")) {
+      if (userAgent.includes("Chrome")) {
+        return "Google Chrome";
+      }
+      return "Apple Safari";
+    }
+    if (userAgent.includes("MSIE") || userAgent.includes("Trident")) {
+      return "Internet Explorer";
+    }
+    if (userAgent.includes("Opera") || userAgent.includes("OPR")) {
+      return "Opera";
+    }
+
+    return "Unknown Browser";
+  };
+
+  let deviceId = localStorage.getItem("deviceId");
+  const browserName = getBrowserName();
+
+  if (!deviceId) {
+    deviceId = uuidv4();
+    localStorage.setItem("deviceId", deviceId);
+  }
+
+  return {deviceId, browserName};
+};

@@ -246,7 +246,7 @@ function Home() {
                     className="card note-card shadow-sm p-3 border-0"
                     onClick={() => handleNoteClick(note._id)}
                   >
-                    <h5 className="card-title">
+                    <h5 className="card-title card-title-custom">
                       {note.title}{" "}
                       {note.category && (
                         <p className="category">
@@ -302,6 +302,8 @@ function Home() {
         setNewNote={setNewNote}
         handleAddNote={handleAddNote}
         categories={categories}
+        setVariable={setVariable}
+        variable={variable}
       />
     </div>
   );

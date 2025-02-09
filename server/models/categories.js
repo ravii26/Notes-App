@@ -12,6 +12,10 @@ const categorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  // color: {
+  //   type: String,
+  //   default: "#000000",
+  // },
 });
 
 const Category = mongoose.model("Category", categorySchema);

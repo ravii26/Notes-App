@@ -394,6 +394,7 @@ body {
 /* Container for horizontal scrolling */
 .category-tabs-container {
   overflow-x: auto; /* Enable horizontal scrolling */
+  scrollbar-width: none; /* Hide scrollbar */
   white-space: nowrap; /* Prevent wrapping */
   padding: 10px;
 }
@@ -1088,3 +1089,23 @@ h3 {
   margin-top: 15px;
   margin-bottom: -150px;
 }
+
+.card-title-custom {
+  max-width: 90%;
+}
+
+.rcp-fields {
+  display: none !important;
+}
+.rcp-body {
+  padding: 15px !important;
+  gap: 0px !important;
+}
+
+/* .table-wrapper-custom {
+  overflow-x: auto;
+  margin-top: 20px;
+  margin-left: auto;
+  max-width: 700px;
+  margin-right: auto;
+} */
