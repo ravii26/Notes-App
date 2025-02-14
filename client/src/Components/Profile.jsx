@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Image from "../assets/profile.png";
-import { useSelector, useDispatch } from 'react-redux';
-import { setUser } from '../redux/slices/authSlice';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { setUser } from '../redux/slices/authSlice';
+import { updateProfile } from "services/apiServices";
+import { getProfile } from "services/apiServices";
 
 
 function Profile() {
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const [profile, setProfile] = useState({
     firstName: "",
     lastName: "",
@@ -17,8 +18,8 @@ function Profile() {
   const [imagePreview, setImagePreview] = useState(Image);
   const [isEditing, setIsEditing] = useState(false);
 
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
+  // const dispatch = useDispatch();
+  // const user = useSelector((state) => state.auth.user);
 
 
   const handleImageChange = (e) => {
@@ -29,21 +30,14 @@ function Profile() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
+
       try {
-        const { data } = await axios.get(
-          "http://localhost:5000/api/v1/get-profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const { data } = await getProfile();
         setProfile(data.user);
         if (data.user.profileImage) {
           setImagePreview(`data:image/png;base64,${data.user.profileImage}`);
         }
-        dispatch(setUser(data.user));
+        // dispatch(setUser(data.user));
       } catch (err) {
         console.error(err);
       }
@@ -58,24 +52,14 @@ function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
 
     try {
-      const { data } = await axios.put(
-        "http://localhost:5000/api/v1/update-profile",
-        profile,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const { data } = await updateProfile(profile);
       setProfile(data);
       alert("Profile updated successfully!");
       setIsEditing(false);
     } catch (err) {
-      setError(err.response.data.message);
+      // setError(err.response.data.message);
       console.error(err);
       alert("Error updating profile.");
     }

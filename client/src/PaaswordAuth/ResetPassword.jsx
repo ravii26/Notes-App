@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-// --
-// import "assets/pwd.css";
 import { useNavigate } from "react-router-dom";
+import { resetPassword } from "services/apiServices";
 const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -11,19 +9,8 @@ const ResetPasswordPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("resetToken");
     try {
-      const response = await axios.post(
-        `http://localhost:5000/api/v1/reset-password`,
-        {
-          newPassword,
-          confirmPassword,
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await resetPassword({ newPassword, confirmPassword });
       alert(response.data.message);
       if (response.status === 200) {
         localStorage.removeItem("resetToken");

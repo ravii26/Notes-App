@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { getProducts } from 'services/apiServices';
+import { deleteProduct } from 'services/apiServices';
 
 function Products() {
 
@@ -15,13 +16,7 @@ function Products() {
 
     const fetchProducts = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const { data } = await axios.get("http://localhost:5000/api/v1/get-products",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            }
-          });
+        const { data } = await getProducts();
         setProducts(data.products);
       } catch (error) {
         console.error(error);
@@ -33,12 +28,7 @@ function Products() {
 
   const handleDelete = async (id) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/v1/delete-product/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await deleteProduct(id);
       setProducts(products.filter((product) => product._id !== id));
     } catch (error) {
       console.error(error);

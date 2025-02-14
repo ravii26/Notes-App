@@ -1,13 +1,9 @@
-// Categories.js
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AddCategoryModal from "Modals/AddCategoryModal";
 import { fetchCategories } from "services/apiServices";
 import { checkToken } from "utils/CommonHelper";
 import { deleteCategory } from "services/apiServices";
-// import { ColorPicker, useColor } from "react-color-palette";
-// import "react-color-palette/lib/css/styles.css";
 
 function Categories() {
   const [categories, setCategories] = useState([]);
@@ -16,7 +12,6 @@ function Categories() {
   const [editingCategory, setEditingCategory] = useState(null);
   const navigate = useNavigate();
  
-
   const fetchAllCategories = async () => {
     try {
       const response = await fetchCategories();
@@ -29,7 +24,7 @@ function Categories() {
 
   useEffect(() => {
     fetchAllCategories();
-  }, []);
+  }, [modalVisible]);
 
   const handleSearch = (e) => {
     const searchText = e.target.value.toLowerCase();

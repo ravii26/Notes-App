@@ -1,9 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
+import { registerUser } from "services/apiServices";
+import { sendNotification } from "services/apiServices";
 
 function SignUp() {
   const [data, setData] = useState({
@@ -22,15 +23,11 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:5000/api/v1/register";
-      const response = await axios.post(url, data);
+      const response = await registerUser(data);
       if (response.status === 200) {
-         await axios.post(
-          "http://localhost:5000/api/v1/send-notification",
-          {
-            user: response.data.user,
-          }
-        );
+        await sendNotification({
+          user: response.data.user,
+        });
       }
       alert("Please Login");
       navigate("/");

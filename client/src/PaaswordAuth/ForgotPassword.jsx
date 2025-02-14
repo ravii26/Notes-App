@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-// --
-// import "../assets/pwd.css";
+import { forgotPassword } from "services/apiServices";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
@@ -11,10 +9,7 @@ const ForgotPasswordPage = () => {
   const navigate = useNavigate();
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:5000/api/v1/forgot-password`,
-        { email }
-      );
+      const response = await forgotPassword({ email });
       localStorage.setItem("email", email);
       alert(response.data.message);
       navigate("/verify-otp");

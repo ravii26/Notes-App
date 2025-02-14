@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Image from "../assets/profile.png";
+import { logoutDevice } from "services/apiServices";
+import { getProfile } from "services/apiServices";
 
 function Header() {
   const navigate = useNavigate();
   const handleLogout = async () => {
     const result = window.confirm("Are you sure you want to logout?");
     if(result){
-      const token = localStorage.getItem("token");
     const deviceId = localStorage.getItem("deviceId");
     try {
-      await axios.post("http://localhost:5000/api/v1/logout-device", {
-        deviceId,
-       
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await logoutDevice(deviceId);
       localStorage.removeItem("token");
       localStorage.removeItem("deviceId");
       navigate("/");
@@ -31,13 +24,8 @@ function Header() {
   const [imagePreview, setImagePreview] = useState(Image);
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/v1/get-profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const { data } = await getProfile()
         const { profileImage } = data.user;
         if (profileImage) {
           setImagePreview(`data:image/png;base64,${profileImage}`);

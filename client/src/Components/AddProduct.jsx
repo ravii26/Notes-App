@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { updateProduct } from "services/apiServices";
+import { getProduct } from "services/apiServices";
+import { createProduct } from "services/apiServices";
 
 function AddProduct() {
   const [name, setName] = useState("");
@@ -106,7 +108,6 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
     try {
       let data = {};
       data.name = name;
@@ -119,32 +120,13 @@ function AddProduct() {
       if (window.location.href.split("?").pop().startsWith("id")) {
         console.log("Edit product");
         const id = window.location.href.split("?").pop().slice(3);
-        const response = await axios.put(
-          `http://localhost:5000/api/v1/update-product/${id}`,
-          data,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await updateProduct(id, data);
         if (response.status === 200) {
           alert("Product updated successfully");
           navigate("/products");
         }
       } else {
-        const response = await axios.post(
-          "http://localhost:5000/api/v1/create-product",
-          data,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log(response);
+        const response = await createProduct(data);
         if (response.status === 200) {
           navigate("/products");
         }
@@ -163,14 +145,7 @@ function AddProduct() {
       console.log("Edit product");
       const id = window.location.href.split("?").pop().slice(3);
       try {
-        const response = axios.get(
-          `http://localhost:5000/api/v1/get-product/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = getProduct(id);
         response.then((response) => {
           const product = response.data.product;
           setName(product.name);

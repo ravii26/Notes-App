@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import io from "socket.io-client";
+import { getNote } from "services/apiServices";
+import { updateNote } from "services/apiServices";
 
 function Note() {
   const [note, setNote] = useState({ title: "", description: "" });
@@ -26,15 +27,7 @@ function Note() {
 
     const fetchNote = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:5000/api/v1/get-note",
-          { noteId },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await getNote({ noteId });
         if (response.status === 201) {
           setNote(response.data.note);
         }
@@ -106,14 +99,7 @@ function Note() {
     }
 
     try {
-      const response = await axios.put(
-        `http://localhost:5000/api/v1/update-note/${noteId}`,
-        {
-          title: note.title,
-          description: note.description,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await updateNote(noteId, { title: note.title, description: note.description });
       if (response.status === 200) {
         console.log("Note autosaved", response.data);
 

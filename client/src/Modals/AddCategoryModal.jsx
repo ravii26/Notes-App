@@ -1,8 +1,10 @@
 // AddCategoryModal.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
+import { addCategory } from "services/apiServices";
+import { updateCategory } from "services/apiServices";
+import { checkToken } from "utils/CommonHelper";
 
 function AddCategoryModal({
   show,
@@ -15,49 +17,27 @@ function AddCategoryModal({
   const [errors, setErrors] = useState({});
   const [color, setColor] = useColor("#561ecb");
 
-  // Update local form state if initialData or show changes.
   useEffect(() => {
     setNewCategory(initialData);
     setErrors({});
   }, [initialData, show]);
 
-  // Performs the API call to create or update the category.
   const handleAddCategory = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please login first");
+    if(!checkToken()) {
       onClose();
       return;
     }
     try {
       if (categoryId) {
-        // Update existing category
-        const response = await axios.post(
-          "http://localhost:5000/api/v1/update-category",
-          {
-            name: newCategory.name,
-            description: newCategory.description,
-            categoryId: categoryId,
-          },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await updateCategory( newCategory.name, newCategory.description, categoryId);
         if (response.status === 200) {
           onSuccess(response.data.category);
           onClose();
           setNewCategory({ name: "", description: "" });
         }
       } else {
-        const response = await axios.post(
-          "http://localhost:5000/api/v1/create-category",
-          newCategory,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await addCategory(newCategory)
         if (response.status === 201) {
-          // Pass the new category back to the parent.
           if (onSuccess) onSuccess(response.data.category);
           onClose();
           setNewCategory({ name: "", description: "" });
@@ -68,7 +48,6 @@ function AddCategoryModal({
     }
   };
 
-  // Validate form and then call the API.
   const handleSave = () => {
     let newErrors = {};
     if (!newCategory.name.trim()) newErrors.name = "Name is required.";

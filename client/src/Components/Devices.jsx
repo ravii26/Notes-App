@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getDevices } from "services/apiServices";
+import { removeDevice } from "services/apiServices";
 
 function Devices() {
   const [devices, setDevices] = useState([
@@ -13,14 +14,9 @@ function Devices() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     try {
       const getdevices = async () => {
-        const response = await axios.get("http://localhost:5000/api/v1/get-devices", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await getDevices();
         setDevices(response.data.devices);
       };
       getdevices();
@@ -30,14 +26,9 @@ function Devices() {
   }, []);
     
     const handleDelete = async (deviceId) => {
-      const token = localStorage.getItem("token");
       const currentDeviceId = localStorage.getItem("deviceId");
         try {   
-            const response = await axios.get(`http://localhost:5000/api/v1/remove-device?deviceId=${deviceId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await removeDevice(deviceId);
           if (response.status === 200) {
             if (currentDeviceId === deviceId) {
               localStorage.removeItem("token");

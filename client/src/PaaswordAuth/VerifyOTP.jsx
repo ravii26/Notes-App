@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { verifyOtp } from "services/apiServices";
 const VerifyOTPPage = () => {
   const navigate = useNavigate();
 
@@ -35,7 +35,6 @@ const VerifyOTPPage = () => {
     }
   };
 
-  // Handle keyDown event for backspace functionality
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       inputRefs.current[index - 1].focus();
@@ -46,10 +45,7 @@ const VerifyOTPPage = () => {
     e.preventDefault();
     const otpValue = otp.join("");
     try {
-      const response = await axios.post(`http://localhost:5000/api/v1/verify-otp`, {
-        email,
-        otp: otpValue,
-      });
+      const response = await verifyOtp({ email, otp: otpValue });
       localStorage.setItem("resetToken", response.data.token);
       alert("OTP verified successfully");
       setEmail("");

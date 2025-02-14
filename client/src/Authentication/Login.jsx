@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 // import { useAuth0 } from "@auth0/auth0-react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { generateDeviceId } from "utils/CommonHelper";
+import { loginUser } from "services/apiServices";
+import { googleAuth } from "services/apiServices";
 
 function Login() {
   const [logindata, setLoginData] = useState({
@@ -19,14 +20,13 @@ function Login() {
   // const { user } = useAuth0();
 
   const navigate = useNavigate();
-  const [data, setData] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate("/notes");
     }
-  }, [navigate, data]);
+  }, [navigate]);
 
   const handleLoginChange = (e) => {
     setLoginData({ ...logindata, [e.target.name]: e.target.value });
@@ -39,8 +39,7 @@ function Login() {
       const {deviceId, browserName} = generateDeviceId();
       logindata.deviceId = deviceId;
       logindata.browserName = browserName;
-      const url = "http://localhost:5000/api/v1/login";
-      const response = await axios.post(url, logindata);
+      const response = await loginUser(logindata);
       localStorage.setItem("token", response.data.data);
       navigate("/notes");
     } catch (error) {
@@ -79,10 +78,7 @@ function Login() {
     const deviceId = generateDeviceId();
     try {
       if (authResult["code"]) {
-        const response =await axios.post("http://localhost:5000/api/v1/googleauth", {
-          code: authResult["code"],
-          deviceId,
-        });
+        const response =await googleAuth({ code: authResult["code"], deviceId });
         localStorage.setItem("token", response.data.data);
         navigate("/notes");
       }
