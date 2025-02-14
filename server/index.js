@@ -49,8 +49,6 @@ app.use("/api/v1", deviceRoutes);
 let userSockets = {};
 
 io.on("connection", (socket) => {
-  console.log("Client connected:", socket.id);
-
   socket.on("disconnect", () => {
     console.log(`Socket ${socket.id} disconnected`);
   });
@@ -63,10 +61,9 @@ io.on("connection", (socket) => {
       userSockets[user] = [];
     }
     userSockets[user].push(socket.id);
-  })
+  });
 
   socket.on("sendMessageToList", ({ userId, message, noteId }) => {
-    console.log(`Message received to broadcast for user ${userId}:`, message);
     const decoded = jwt.verify(userId, process.env.JWT_SECRET);
     if (!decoded) return res.status(401).send({ message: "Invalid token" });
     userId = decoded._id;
@@ -84,12 +81,14 @@ io.on("connection", (socket) => {
     console.log(`Client disconnected: ${socket.id}`);
     // Clean up the `userSockets` map
     for (const userId in userSockets) {
-      userSockets[userId] = userSockets[userId].filter((id) => id !== socket.id);
+      userSockets[userId] = userSockets[userId].filter(
+        (id) => id !== socket.id
+      );
       if (userSockets[userId].length === 0) {
         delete userSockets[userId];
       }
     }
-    console.log("Updated userSockets:", userSockets);
+
   });
 
   socket.emit("onConnect", { id: socket.id });
